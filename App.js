@@ -5,6 +5,7 @@ import {
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
 import MainStack from "./common/navigation/stackNavigator";
+import { MenuProvider } from "react-native-popup-menu";
 
 // Style Setup
 import "./common/styles/mainStyleConfig";
@@ -23,5 +24,9 @@ export default function App() {
     return null;
   }
 
-  return <MainStack />;
+  return (
+    <MenuProvider>
+      <MainStack />
+    </MenuProvider>
+  );
 }

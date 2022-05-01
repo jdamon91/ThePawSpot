@@ -14,7 +14,7 @@ const actions = [
     ),
     name: "bt_accessibility",
     position: 1,
-    color: Colors.secondaryColor,
+    color: "#fbf3e4",
     tintColor: null,
     textStyle: {
       fontSize: 14,
@@ -32,7 +32,7 @@ const actions = [
     ),
     name: "bt_language",
     position: 2,
-    color: Colors.secondaryColor,
+    color: "#fbf3e4",
     tintColor: null,
     textStyle: {
       fontSize: 14,
@@ -50,7 +50,7 @@ const actions = [
     ),
     name: "bt_room",
     position: 3,
-    color: Colors.secondaryColor,
+    color: "#fbf3e4",
     tintColor: null,
     textStyle: {
       fontSize: 14,
@@ -68,7 +68,7 @@ const actions = [
     ),
     name: "bt_videocam",
     position: 4,
-    color: Colors.secondaryColor,
+    color: "#fbf3e4",
     tintColor: Colors.primaryColor,
     textStyle: {
       fontSize: 14,

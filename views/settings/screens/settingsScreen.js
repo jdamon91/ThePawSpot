@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, Colors } from "react-native-ui-lib";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { auth, db } from "../../../firebase";
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        try {
+          setAuthenticated(auth.currentUser?.uid);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }, [auth.currentUser])
+  );
+
+  console.log(auth.currentUser, authenticated);
 
   const settingsOptions = [
     { title: "Account", icon: "person-outline" },
@@ -14,9 +30,13 @@ const SettingsScreen = () => {
     { title: "Help and Support", icon: "headset-outline" },
     { title: "About Us", icon: "help-circle-outline" },
     {
-      title: "Sign In",
+      title: authenticated ? "Sign Out" : "Sign In",
       icon: "person",
-      action: () => navigation.navigate("Signin"),
+      action: authenticated
+        ? () => {
+            auth.signOut(), setAuthenticated(false);
+          }
+        : () => navigation.navigate("Signin"),
     },
   ];
 

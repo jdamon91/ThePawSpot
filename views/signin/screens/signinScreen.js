@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -10,9 +10,27 @@ import {
 import { Text, Colors } from "react-native-ui-lib";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { auth, db } from "../../../firebase";
 
-const SigninScreen = () => {
+const SignInScreen = () => {
   const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const signInUser = () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
 
   return (
     <View style={styles.rootContainer}>
@@ -33,10 +51,14 @@ const SigninScreen = () => {
         style={styles.backgroundImage}
       />
       <TextInput
-        placeholder="Username"
+        onChangeText={(email) => setEmail(email)}
+        placeholder="Email Address"
         style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
       />
       <TextInput
+        textContentType="password"
+        secureTextEntry
+        onChangeText={(password) => setPassword(password)}
         placeholder="Password"
         style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
       />
@@ -44,6 +66,7 @@ const SigninScreen = () => {
         Forgot Password?
       </Text>
       <TouchableOpacity
+        onPress={signInUser}
         style={[styles.signinButton, { backgroundColor: Colors.primaryColor }]}
       >
         <Text white style={styles.signinButtonText}>
@@ -146,4 +169,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SigninScreen;
+export default SignInScreen;

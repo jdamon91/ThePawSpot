@@ -12,35 +12,54 @@ import { Text, Colors } from "react-native-ui-lib";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { db, auth } from "../../../firebase";
+import ImagePicker from "../../../common/components/imagePicker";
+import LoadingCat from "../../../common/components/loadingCat";
 
 const SignupScreen = () => {
   const navigation = useNavigation();
   const uid = auth.uid;
+  const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   const [activeOptionIndex, setActiveOptionIndex] = useState(1);
   const [currentStep, setCurrentStep] = useState(1);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
 
   const createNewUser = () => {
     try {
-      db.collection("users")
-        .doc(uid)
-        .set({
-          uid,
-          name,
-          username,
-          number: phoneNumber,
-          city: location,
-          bio,
-          photoURL:
-            photoURL ||
-            "https://firebasestorage.googleapis.com/v0/b/likenow-294a5.appspot.com/o/1671814b-8cad-41df-9880-0b2efbbf00af?alt=media&token=ab3db4fc-f10a-4189-8fa1-423c6c349383",
-          skills: skillsList,
-          contractor: contractor === "contractor" ? true : false,
-          active: true,
-          visible: true,
-          open: true,
-          totalDeals: 0,
-          venmoUsername: venmoUsername,
-          // email: email,
+      setLoading(true);
+      console.log(username, password, email, firstName, lastName, city, state);
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(userCredential.user.uid);
+          db.collection("users").doc(user.uid).set({
+            username,
+            password,
+            email,
+            firstName,
+            lastName,
+            city,
+            state,
+          });
+          setTimeout(() => {
+            setLoading(false);
+            navigation.navigate("Home");
+          }, 3000);
+        })
+        .catch((error) => {
+          setLoading(false);
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
         });
     } catch (error) {
       console.log(error);
@@ -150,39 +169,53 @@ const SignupScreen = () => {
   const renderGeneralInputs = () => {
     return (
       <View>
-        <Image
-          source={require("../../../assets/girl.jpg")}
-          style={styles.signupAvatar}
-        />
+        <View style={styles.imagePickerContainer}>
+          <ImagePicker
+            storeImage={() => setPhotoUrl(photoUrl)}
+            setLoading={(value) => setImageLoading(value)}
+            creating={true}
+          />
+        </View>
         <Text style={styles.textInputHelper}>Username</Text>
         <TextInput
+          autoCapitalize="none"
+          onChangeText={(username) => setUsername(username)}
           placeholder="Username"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
         <Text style={styles.textInputHelper}>Create Password</Text>
         <TextInput
+          textContentType="password"
+          secureTextEntry
+          onChangeText={(password) => setPassword(password)}
           placeholder="Password"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
         <Text style={styles.textInputHelper}>Email Address</Text>
         <TextInput
+          autoCapitalize="none"
+          textContentType="emailAddress"
+          onChangeText={(email) => setEmail(email)}
           placeholder="Email"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
         <Text style={styles.textInputHelper}>First Name</Text>
         <TextInput
-          placeholder="Name"
+          onChangeText={(firstName) => setFirstName(firstName)}
+          placeholder="First Name"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
         <Text style={styles.textInputHelper}>Last Name</Text>
         <TextInput
-          placeholder="Name"
+          onChangeText={(lastName) => setLastName(lastName)}
+          placeholder="Last Name"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: 1, marginRight: 15 }}>
             <Text style={styles.textInputHelper}>City</Text>
             <TextInput
+              onChangeText={(city) => setCity(city)}
               placeholder="Your City"
               style={[
                 styles.signinTextInput,
@@ -193,6 +226,7 @@ const SignupScreen = () => {
           <View style={{ flex: 1 }}>
             <Text style={styles.textInputHelper}>State</Text>
             <TextInput
+              onChangeText={(state) => setState(state)}
               placeholder="Your State"
               style={[
                 styles.signinTextInput,
@@ -213,7 +247,11 @@ const SignupScreen = () => {
   };
 
   const stepNextHandler = () => {
-    setCurrentStep(currentStep + 1);
+    if (currentStep === 2) {
+      createNewUser();
+    } else {
+      setCurrentStep(currentStep + 1);
+    }
   };
 
   const stepBackHandler = () => {
@@ -261,6 +299,10 @@ const SignupScreen = () => {
       </TouchableOpacity>
     );
   };
+
+  if (loading) {
+    return <LoadingCat />;
+  }
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -439,6 +481,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 10,
     marginTop: -15,
+  },
+  imagePickerContainer: {
+    alignItems: "center",
+    paddingBottom: 10,
+    paddingTop: 5,
   },
 });
 
