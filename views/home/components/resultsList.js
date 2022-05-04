@@ -132,12 +132,36 @@ const ResultsList = (props) => {
     }
   };
 
-  const navigationHandler = () => {
+  const navigationHandler = (item) => {
     if (props?.activeCategory === "Donate") {
-      navigation.navigate("Donate");
+      navigation.navigate("Donate", {
+        photoUrl: item.photoUrl,
+        name: item.name,
+      });
     }
     if (props?.activeCategory === "Lost Pets") {
-      navigation.navigate("LostMap");
+      navigation.navigate("LostMap", {
+        photoUrl: item.photoUrl,
+        name: item.name,
+      });
+    }
+    if (props?.activeCategory === "Adopt") {
+      navigation.navigate("AdoptionProfile", {
+        photoUrl: item.photoUrl,
+        name: item.name,
+      });
+    }
+    if (props?.activeCategory === "Vets") {
+      navigation.navigate("UserProfile", {
+        photoUrl: item.photoUrl,
+        name: item.name,
+      });
+    }
+    if (props?.activeCategory === "Shelters") {
+      navigation.navigate("ShelterProfile", {
+        photoUrl: item.photoUrl,
+        name: item.name,
+      });
     }
   };
 
@@ -146,7 +170,7 @@ const ResultsList = (props) => {
       {resultsData.map((item, index) => {
         return (
           <TouchableOpacity
-            onPress={navigationHandler}
+            onPress={() => navigationHandler(item)}
             key={index}
             style={styles.resultsListItem}
           >
@@ -165,7 +189,7 @@ const ResultsList = (props) => {
                 ]}
               >
                 <Image
-                  source={item.icon}
+                  source={{ uri: item.photoUrl }}
                   style={[
                     styles.resultsListItemIcon,
                     { tintColor: item?.tintColor ? item?.tintColor : null },

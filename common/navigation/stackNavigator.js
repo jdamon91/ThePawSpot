@@ -9,6 +9,9 @@ import LostMapScreen from "../../views/lostMap/screens/lostMapScreen";
 import SigninScreen from "../../views/signin/screens/signinScreen";
 import SignupScreen from "../../views/signup/screens/signupScreen";
 import DonateScreen from "../../views/donate/screens/donateScreen";
+import AdoptionProfileScreen from "../../views/profile/screens/adoptionProfileScreen";
+import UserProfileScreen from "../../views/profile/screens/userProfileScreen";
+import ShelterProfileScreen from "../../views/profile/screens/shelterProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +33,21 @@ function MainStack() {
           <Stack.Screen
             name="LostMap"
             component={LostMapScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AdoptionProfile"
+            component={AdoptionProfileScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UserProfile"
+            component={UserProfileScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ShelterProfile"
+            component={ShelterProfileScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

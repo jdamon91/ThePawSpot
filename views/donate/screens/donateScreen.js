@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   photoContainer: {
-    backgroundColor: "red",
+    backgroundColor: "#FFF",
     height: Dimensions.get("window").height * 0.45,
   },
   infoContainer: {

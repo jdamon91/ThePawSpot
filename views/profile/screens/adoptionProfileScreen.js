@@ -12,8 +12,12 @@ import ProfileScreenHeader from "../components/profileScreenHeader";
 import ContactInfoBox from "../components/contactInfoBox";
 import { Ionicons } from "@expo/vector-icons";
 import InfoBox from "../components/infoBox";
+import { useRoute } from "@react-navigation/native";
 
-const ProfileScreen = () => {
+const AdoptionProfileScreen = () => {
+  const route = useRoute();
+  const { name, photoUrl } = route.params;
+
   return (
     <View style={styles.rootContainer}>
       <ProfileScreenHeader />
@@ -21,7 +25,7 @@ const ProfileScreen = () => {
         <Image
           resizeMode="cover"
           style={styles.profileImage}
-          source={require("../../../assets/profile-cat.png")}
+          source={{ uri: photoUrl }}
         />
       </View>
       <ScrollView
@@ -30,7 +34,7 @@ const ProfileScreen = () => {
       >
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <View style={styles.column}>
-            <Text style={styles.infoTitle}>Fiona</Text>
+            <Text style={styles.infoTitle}>{name}</Text>
             <View style={[styles.row, { marginTop: 5 }]}>
               <Ionicons name="location" size={16} color="#ababad" />
               <Text style={styles.infoLocationText}>Raleigh, NC (5 miles)</Text>
@@ -76,6 +80,8 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
+    height: Dimensions.get("window").height,
+    backgroundColor: "#FFF",
   },
   photoContainer: {
     backgroundColor: "#FFF",
@@ -148,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default AdoptionProfileScreen;

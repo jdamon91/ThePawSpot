@@ -12,8 +12,12 @@ import ProfileScreenHeader from "../components/profileScreenHeader";
 import ContactInfoBox from "../components/contactInfoBox";
 import { Ionicons } from "@expo/vector-icons";
 import InfoBox from "../components/infoBox";
+import { useRoute } from "@react-navigation/native";
 
-const ProfileScreen = () => {
+const UserProfileScreen = () => {
+  const route = useRoute();
+  const { photoUrl, name } = route.params;
+  console.log(photoUrl);
   return (
     <View style={styles.rootContainer}>
       <ProfileScreenHeader />
@@ -21,7 +25,7 @@ const ProfileScreen = () => {
         <Image
           resizeMode="cover"
           style={styles.profileImage}
-          source={require("../../../assets/profile-cat.png")}
+          source={{ uri: photoUrl }}
         />
       </View>
       <ScrollView
@@ -30,10 +34,13 @@ const ProfileScreen = () => {
       >
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <View style={styles.column}>
-            <Text style={styles.infoTitle}>Fiona</Text>
+            <Text style={styles.infoTitle}>{name}</Text>
+
             <View style={[styles.row, { marginTop: 5 }]}>
               <Ionicons name="location" size={16} color="#ababad" />
-              <Text style={styles.infoLocationText}>Raleigh, NC (5 miles)</Text>
+              <Text style={styles.infoLocationText}>
+                Blue Pearl Animal Hospital
+              </Text>
             </View>
           </View>
           <TouchableOpacity
@@ -46,18 +53,19 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.infoBoxContainer}>
-          <InfoBox title={"Female"} subTitle={"Sex"} color={"#ffefce"} />
-          <InfoBox title={"1 Year"} subTitle={"Age"} color={"#f7f7f7"} />
-          <InfoBox title={"9kg"} subTitle={"Weight"} color={"#ffefce"} />
-        </View>
-        <View style={styles.contactInfoContainer}>
-          <ContactInfoBox title={"Christin"} subTitle={"Fiona's Owner"} />
+          <InfoBox title={"General"} subTitle={"Specialty"} color={"#ffefce"} />
+          <InfoBox
+            title={"8 Years"}
+            subTitle={"Experience"}
+            color={"#f7f7f7"}
+          />
+          <InfoBox title={"Very"} subTitle={"Responsive"} color={"#ffefce"} />
         </View>
         <View style={styles.infoDescriptionContainer}>
-          <Text style={styles.infoDescriptionText} numberOfLines={2}>
-            This amazing sweet girl was found on the side of the road and
-            rescued. She is incredibly sweet and can't wait for her furever
-            home.
+          <Text style={styles.infoDescriptionText} numberOfLines={4}>
+            Hi There! I am Dr. Bradley 😁, an animal lover and advocate through
+            and through ❤️! I specialize in most general pets and would love to
+            see yours! Send me a message 💬 and let's chat!
           </Text>
         </View>
         <TouchableOpacity
@@ -66,7 +74,7 @@ const ProfileScreen = () => {
             { backgroundColor: Colors.primaryColor },
           ]}
         >
-          <Text style={styles.infoSectionActionButtonText}>ADOPT ME</Text>
+          <Text style={styles.infoSectionActionButtonText}>CHAT NOW</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -76,6 +84,8 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
+    height: Dimensions.get("window").height,
+    backgroundColor: "#FFF",
   },
   photoContainer: {
     backgroundColor: "#FFF",
@@ -121,7 +131,6 @@ const styles = StyleSheet.create({
   },
   infoDescriptionContainer: {
     paddingHorizontal: 5,
-    marginTop: 15,
   },
   infoDescriptionText: {
     fontFamily: "Poppins_400Regular",
@@ -148,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default UserProfileScreen;

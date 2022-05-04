@@ -12,8 +12,12 @@ import ProfileScreenHeader from "../components/profileScreenHeader";
 import ContactInfoBox from "../components/contactInfoBox";
 import { Ionicons } from "@expo/vector-icons";
 import InfoBox from "../components/infoBox";
+import { useRoute } from "@react-navigation/native";
 
-const ProfileScreen = () => {
+const ShelterProfileScreen = () => {
+  const route = useRoute();
+  const { name, photoUrl } = route.params;
+  console.log(photoUrl);
   return (
     <View style={styles.rootContainer}>
       <ProfileScreenHeader />
@@ -21,7 +25,7 @@ const ProfileScreen = () => {
         <Image
           resizeMode="cover"
           style={styles.profileImage}
-          source={require("../../../assets/profile-cat.png")}
+          source={{ uri: photoUrl }}
         />
       </View>
       <ScrollView
@@ -30,7 +34,7 @@ const ProfileScreen = () => {
       >
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <View style={styles.column}>
-            <Text style={styles.infoTitle}>Fiona</Text>
+            <Text style={styles.infoTitle}>{name}</Text>
             <View style={[styles.row, { marginTop: 5 }]}>
               <Ionicons name="location" size={16} color="#ababad" />
               <Text style={styles.infoLocationText}>Raleigh, NC (5 miles)</Text>
@@ -51,13 +55,13 @@ const ProfileScreen = () => {
           <InfoBox title={"9kg"} subTitle={"Weight"} color={"#ffefce"} />
         </View>
         <View style={styles.contactInfoContainer}>
-          <ContactInfoBox title={"Christin"} subTitle={"Fiona's Owner"} />
+          <ContactInfoBox title={"Heather"} subTitle={"Adoption Coordinator"} />
         </View>
         <View style={styles.infoDescriptionContainer}>
-          <Text style={styles.infoDescriptionText} numberOfLines={2}>
-            This amazing sweet girl was found on the side of the road and
-            rescued. She is incredibly sweet and can't wait for her furever
-            home.
+          <Text style={styles.infoDescriptionText} numberOfLines={4}>
+            Furever Animal Shelter has made it their mission to love and support
+            a wide variety of animals in need of a place to call home. Come and
+            visit our furry friends today and find your next furever friend!
           </Text>
         </View>
         <TouchableOpacity
@@ -66,7 +70,7 @@ const ProfileScreen = () => {
             { backgroundColor: Colors.primaryColor },
           ]}
         >
-          <Text style={styles.infoSectionActionButtonText}>ADOPT ME</Text>
+          <Text style={styles.infoSectionActionButtonText}>GET DIRECTIONS</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -76,6 +80,8 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
+    height: Dimensions.get("window").height,
+    backgroundColor: "#FFF",
   },
   photoContainer: {
     backgroundColor: "#FFF",
@@ -148,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default ShelterProfileScreen;
