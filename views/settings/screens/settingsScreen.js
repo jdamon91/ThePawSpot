@@ -24,11 +24,23 @@ const SettingsScreen = () => {
   console.log(auth.currentUser, authenticated);
 
   const settingsOptions = [
-    { title: "Account", icon: "person-outline" },
+    {
+      title: "Account",
+      icon: "person-outline",
+      action: () => navigation.navigate("MyProfile"),
+    },
     { title: "Notifications", icon: "notifications-outline" },
     { title: "Privacy & Security", icon: "lock-closed-outline" },
-    { title: "Help and Support", icon: "headset-outline" },
-    { title: "About Us", icon: "help-circle-outline" },
+    {
+      title: "Help and Support",
+      icon: "headset-outline",
+      action: () => navigation.navigate("Support"),
+    },
+    {
+      title: "About Us",
+      icon: "help-circle-outline",
+      action: () => navigation.navigate("AboutUs"),
+    },
     {
       title: authenticated ? "Sign Out" : "Sign In",
       icon: "person",

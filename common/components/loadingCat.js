@@ -3,7 +3,7 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import LottieView from "lottie-react-native";
 import { Text, Colors } from "react-native-ui-lib";
 import { useState } from "react";
-export default function CatSpinner() {
+export default function CatSpinner({ title }) {
   return (
     <View
       style={[styles.rootContainer, { backgroundColor: Colors.secondaryColor }]}
@@ -14,7 +14,7 @@ export default function CatSpinner() {
         autoPlay
       />
       <Text style={[styles.loadingText, { color: Colors.orange20 }]}>
-        Creating Your Account...
+        {title}
       </Text>
     </View>
   );

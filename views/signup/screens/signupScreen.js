@@ -301,7 +301,7 @@ const SignupScreen = () => {
   };
 
   if (loading) {
-    return <LoadingCat />;
+    return <LoadingCat title="Creating your account..." />;
   }
 
   return (

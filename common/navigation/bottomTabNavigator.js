@@ -3,7 +3,7 @@ import { Colors } from "react-native-ui-lib";
 
 // Screens
 import HomeScreen from "../../views/home/screens/homeScreen";
-import ProfileScreen from "../../views/profile/screens/profileScreen";
+import AccountProfileScreen from "../../views/profile/screens/accountProfileScreen";
 import SettingsScreen from "../../views/settings/screens/settingsScreen";
 import MessagesScreen from "../../views/messages/screens/messagesScreen";
 
@@ -59,8 +59,8 @@ const BottomTabNavBar = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="MyProfile"
+        component={AccountProfileScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <FontAwesome
