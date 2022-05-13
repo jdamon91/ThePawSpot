@@ -1,64 +1,47 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
 import { Colors } from "react-native-ui-lib";
 import MapStyle from "./lostMapStyle";
 import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapView from "react-native-map-clustering";
-
-const animalData = [
-  {
-    location: {
-      latitude: 40.415,
-      longitude: -80.0,
-      latitudeDelta: 0.0952,
-      longitudeDelta: 0.0471,
-    },
-  },
-  {
-    location: {
-      latitude: 40.4,
-      longitude: -80.01,
-      latitudeDelta: 0.0952,
-      longitudeDelta: 0.0471,
-    },
-  },
-  {
-    location: {
-      latitude: 40.4299,
-      longitude: -80.01,
-      latitudeDelta: 0.0952,
-      longitudeDelta: 0.0471,
-    },
-  },
-  {
-    location: {
-      latitude: 40.44,
-      longitude: -80.035,
-      latitudeDelta: 0.0952,
-      longitudeDelta: 0.0471,
-    },
-  },
-  {
-    location: {
-      latitude: 40.38,
-      longitude: -80.03,
-      latitudeDelta: 0.0952,
-      longitudeDelta: 0.0471,
-    },
-  },
-];
+import { db } from "../../../firebase";
 
 const LostMap = () => {
   const mapRef = useRef(null);
 
   const [activeIndex, setActiveIndex] = useState("");
   const [showCards, setShowCards] = useState("flex");
+  const [animalData, setAnimalData] = useState([]);
+
+  useEffect(() => {
+    fetchAnimals();
+  }, [fetchAnimals]);
+
+  const fetchAnimals = async () => {
+    try {
+      await db.collection("lostAnimals").onSnapshot((snapshot) => {
+        const animals = [];
+        snapshot.docs.forEach((animal) => {
+          animals.push(animal.data());
+        });
+        setAnimalData(animals);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const renderAnimalPin = (animal, index) => {
     return (
       <Image
-        source={require("../../../assets/paw.png")}
-        style={{ height: 32, width: 32 }}
+        source={{ uri: animal.photoUrl }}
+        style={{
+          height: activeIndex === index ? 55 : 40,
+          width: activeIndex === index ? 55 : 40,
+          borderRadius: 100,
+          borderWidth: 2,
+          borderColor: Colors.primaryColor,
+        }}
       />
     );
   };
@@ -69,10 +52,10 @@ const LostMap = () => {
     // setActiveCard(animale.username);
     mapRef.current.animateToRegion(
       {
-        latitude: animal.location?.latitude - 0.01,
-        longitude: animal.location?.longitude,
-        latitudeDelta: 0.075,
-        longitudeDelta: 0.075,
+        latitude: animal.location?.coords?.latitude - 0.01,
+        longitude: animal.location?.coords?.longitude,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
       },
       750
     );
@@ -102,6 +85,7 @@ const LostMap = () => {
         showsCompass={false}
         showsBuildings={false}
         showsMyLocationButton={false}
+        followsUserLocation
         showsPointsOfInterest={false}
         zoomEnabled
         minZoomLevel={8} // default => 0
@@ -112,7 +96,7 @@ const LostMap = () => {
         {animalData.map((animal, index) => {
           return (
             <Marker
-              coordinate={animal.location}
+              coordinate={animal.location?.coords}
               key={index}
               onPress={() => pinPressHandler(animal, index)}
               zIndex={index}
