@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors } from "react-native-ui-lib";
 import ImagePicker from "../../../common/components/imagePicker";
 import { FontAwesome } from "@expo/vector-icons";
-import LoadingCat from "../../../common/components/loadingCat";
+import LoadingCatPost from "../../../common/components/loadingCatPost";
 import { db } from "../../../firebase";
 
 const LostMapModal = (props) => {
@@ -27,7 +27,7 @@ const LostMapModal = (props) => {
       setTimeout(() => {
         setLoading(false);
         props.closeModal();
-      }, 3000);
+      }, 4000);
     } catch (error) {
       console.log(error);
     }
@@ -41,7 +41,9 @@ const LostMapModal = (props) => {
           { display: props.visible ? "flex" : "none" },
         ]}
       >
-        <LoadingCat title="Loading..." />
+        <View style={styles.modalView}>
+          <LoadingCatPost />
+        </View>
       </View>
     );
   }
