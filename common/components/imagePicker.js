@@ -55,7 +55,11 @@ export default class App extends React.Component {
               source={{ uri: this.props.image || this.state.image }}
               style={[
                 styles.imagePickerImage,
-                { borderColor: Colors.primaryColor },
+                {
+                  borderColor: Colors.primaryColor,
+                  height: this.props.customHeight || 185,
+                  width: this.props.customWidth || 185,
+                },
               ]}
             />
             {this.props.editMode ? (
@@ -112,6 +116,8 @@ export default class App extends React.Component {
                   {
                     backgroundColor: Colors.secondaryColor,
                     borderColor: Colors.primaryColor,
+                    height: this.props.customHeight || 185,
+                    width: this.props.customWidth || 185,
                   },
                 ]}
                 onPress={() => this.setState({ open: !this.state.open })}
@@ -262,6 +268,7 @@ export default class App extends React.Component {
         this.setState({ loading: true });
         const uploadUrl = await uploadImageAsync(pickerResult.uri);
         this.setState({ image: uploadUrl, loading: false });
+        console.log(uploadUrl);
         this.props.storeImage(uploadUrl);
       }
     } catch (e) {

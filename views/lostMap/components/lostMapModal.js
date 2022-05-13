@@ -4,13 +4,47 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors } from "react-native-ui-lib";
 import ImagePicker from "../../../common/components/imagePicker";
 import { FontAwesome } from "@expo/vector-icons";
+import LoadingCat from "../../../common/components/loadingCat";
+import { db } from "../../../firebase";
 
 const LostMapModal = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [animalType, setAnimalType] = useState(false);
-  const [photoUrl, setPhotoUrl] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
+
+  const createNewLostAnimal = () => {
+    try {
+      setLoading(true);
+      db.collection("lostAnimals").add({
+        animalType,
+        photoUrl,
+        additionalInfo,
+        location: props.userLocation,
+      });
+      setTimeout(() => {
+        setLoading(false);
+        props.closeModal();
+      }, 3000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View
+        style={[
+          styles.centeredView,
+          { display: props.visible ? "flex" : "none" },
+        ]}
+      >
+        <LoadingCat title="Loading..." />
+      </View>
+    );
+  }
 
   return (
     <View
@@ -23,14 +57,16 @@ const LostMapModal = (props) => {
         <FontAwesome
           style={styles.modalCloseButton}
           name="close"
-          size={40}
+          size={36}
           color={Colors.primaryColor}
           onPress={() => props.closeModal()}
         />
         <ImagePicker
-          storeImage={() => setPhotoUrl(photoUrl)}
+          storeImage={(photoUrl) => setPhotoUrl(photoUrl)}
           setLoading={(value) => setImageLoading(value)}
           creating={true}
+          customHeight={150}
+          customWidth={150}
         />
         <Text style={styles.textInputHelper}>Animal Type</Text>
         <TextInput
@@ -45,7 +81,7 @@ const LostMapModal = (props) => {
           placeholder="Any additional details you want to provide?"
           style={[
             styles.textInput,
-            { backgroundColor: Colors.grey80, height: 100 },
+            { backgroundColor: Colors.grey80, height: 80 },
           ]}
         />
         <TouchableOpacity
@@ -53,7 +89,7 @@ const LostMapModal = (props) => {
             styles.lostMapModalButton,
             { backgroundColor: Colors.primaryColor },
           ]}
-          onPress={() => props.closeModal()}
+          onPress={createNewLostAnimal}
         >
           <Text style={styles.lostMapModalButtonText}>CREATE POST</Text>
         </TouchableOpacity>
@@ -78,7 +114,9 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    paddingHorizontal: 20,
+    paddingBottom: 15,
+    paddingTop: 25,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -92,7 +130,7 @@ const styles = StyleSheet.create({
   },
   lostMapModalButton: {
     borderRadius: 30,
-    paddingVertical: 12,
+    paddingVertical: 9,
     paddingHorizontal: 20,
     width: Dimensions.get("window").width * 0.8,
   },
@@ -112,7 +150,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Poppins_700Bold",
     letterSpacing: 0.75,
-    fontSize: 16,
+    fontSize: 15,
   },
   textInput: {
     borderRadius: 10,
@@ -133,8 +171,8 @@ const styles = StyleSheet.create({
   },
   modalCloseButton: {
     position: "absolute",
-    top: 8,
-    right: 15,
+    top: 5,
+    right: 12,
   },
 });
 

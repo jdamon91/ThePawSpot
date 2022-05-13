@@ -48,6 +48,7 @@ const SignupScreen = () => {
           const user = userCredential.user;
           console.log(userCredential.user.uid);
           db.collection("users").doc(user.uid).set({
+            photoUrl,
             username,
             password,
             email,
@@ -205,7 +206,7 @@ const SignupScreen = () => {
       <View>
         <View style={styles.imagePickerContainer}>
           <ImagePicker
-            storeImage={() => setPhotoUrl(photoUrl)}
+            storeImage={(photoUrl) => setPhotoUrl(photoUrl)}
             setLoading={(value) => setImageLoading(value)}
             creating={true}
           />

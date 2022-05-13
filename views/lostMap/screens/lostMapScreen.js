@@ -1,19 +1,46 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
-import { Text, Colors } from "react-native-ui-lib";
-import { Ionicons } from "@expo/vector-icons";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
 import LostMap from "../components/lostMap";
 import LostMapHeaderOptions from "../components/lostMapHeaderOptions";
 import LostMapMenuOptions from "../components/lostMapMenuOptions";
 import LostMapModal from "../components/lostMapModal";
+import * as Location from "expo-location";
 
 const LostMapScreen = () => {
   const [showModal, setShowModal] = useState(false);
+  const [userLocation, setUserLocation] = useState({});
+
+  useEffect(() => {
+    getLocationHandler();
+  }, [getLocationHandler]);
+
+  const getLocationHandler = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "UNABLE TO GET LOCATION!",
+        "LOCATION PERMISSION HAS BEEN DENIED ON THIS DEVICE. YOU MUST ENABLE YOUR LOCATION IN YOUR APP SETTINGS TO PROPOSE DEALS.",
+        [
+          {
+            text: "OK",
+            onPress: () => setGettingLocation(false),
+            style: "cancel",
+          },
+        ]
+      );
+    } else {
+      let location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Low,
+      });
+      setUserLocation(location);
+    }
+  };
 
   return (
     <View style={styles.rootContainer}>
       <LostMapModal
         visible={showModal}
+        userLocation={userLocation}
         closeModal={() => setShowModal(false)}
       />
       <LostMapHeaderOptions />
