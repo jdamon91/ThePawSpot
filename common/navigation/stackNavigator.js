@@ -17,6 +17,7 @@ import UserProfileScreen from "../../views/profile/screens/userProfileScreen";
 import ShelterProfileScreen from "../../views/profile/screens/shelterProfileScreen";
 import AboutUsScreen from "../../views/settings/screens/aboutUsScreen";
 import SupportScreen from "../../views/settings/screens/supportScreen";
+import PrivacyScreen from "../../views/settings/screens/privacyScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,29 @@ function MainStack() {
           <Stack.Screen
             name="AboutUs"
             component={AboutUsScreen}
+            options={({ navigation, route }) => ({
+              headerStyle: {
+                backgroundColor: Colors.secondaryColor,
+                shadowColor: "transparent",
+                elevation: 0, // remove shadow on Android
+                shadowOpacity: 0, // remove shadow on iOS
+              },
+              title: "",
+              headerShadowVisible: false,
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <FontAwesome
+                    name="arrow-left"
+                    size={28}
+                    color={Colors.primaryColor}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="Privacy"
+            component={PrivacyScreen}
             options={({ navigation, route }) => ({
               headerStyle: {
                 backgroundColor: Colors.secondaryColor,

@@ -1,13 +1,6 @@
 import React, { useRef, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Image,
-} from "react-native";
-import { Text, Colors } from "react-native-ui-lib";
-import { Ionicons } from "@expo/vector-icons";
+import { View, StyleSheet, Dimensions, Image } from "react-native";
+import { Colors } from "react-native-ui-lib";
 import MapStyle from "./lostMapStyle";
 import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapView from "react-native-map-clustering";

@@ -30,6 +30,12 @@ const SignupScreen = () => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
+  const [bio, setBio] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [specialty, setSpecialty] = useState("");
+  const [primaryFocus, setPrimaryFocus] = useState("");
+  const [shelterName, setShelterName] = useState("");
+  const [shelterTitle, setShelterTitle] = useState("");
 
   const createNewUser = () => {
     try {
@@ -49,6 +55,12 @@ const SignupScreen = () => {
             lastName,
             city,
             state,
+            bio,
+            organization,
+            specialty,
+            shelterName,
+            shelterTitle,
+            primaryFocus,
           });
           setTimeout(() => {
             setLoading(false);
@@ -129,9 +141,9 @@ const SignupScreen = () => {
             source={require("../../../assets/paw.png")}
             style={styles.accountSignupOptionImage}
           />
-          <Text style={styles.accountSignupOptionText}>Pet Owner</Text>
+          <Text style={styles.accountSignupOptionText}>Professional</Text>
           <Text style={styles.accountSignupOptionSubText}>
-            I have a pet or I am looking to rehome my current pet!
+            I work with animals and want to offer my services!
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -166,6 +178,28 @@ const SignupScreen = () => {
     );
   };
 
+  const professionalInputs = () => {
+    return (
+      <>
+        <Text style={styles.textInputHelper}>Specialty</Text>
+        <TextInput
+          autoCapitalize="none"
+          onChangeText={(specialty) => setSpecialty(specialty)}
+          placeholder="General, specialized?"
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+        <Text style={styles.textInputHelper}>Or</Text>
+        <TextInput
+          textContentType="password"
+          secureTextEntry
+          onChangeText={(password) => setPassword(password)}
+          placeholder="Password"
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+      </>
+    );
+  };
+
   const renderGeneralInputs = () => {
     return (
       <View>
@@ -183,14 +217,6 @@ const SignupScreen = () => {
           placeholder="Username"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
-        <Text style={styles.textInputHelper}>Create Password</Text>
-        <TextInput
-          textContentType="password"
-          secureTextEntry
-          onChangeText={(password) => setPassword(password)}
-          placeholder="Password"
-          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
-        />
         <Text style={styles.textInputHelper}>Email Address</Text>
         <TextInput
           autoCapitalize="none"
@@ -199,18 +225,42 @@ const SignupScreen = () => {
           placeholder="Email"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
-        <Text style={styles.textInputHelper}>First Name</Text>
+        <Text style={styles.textInputHelper}>Create Password</Text>
         <TextInput
-          onChangeText={(firstName) => setFirstName(firstName)}
-          placeholder="First Name"
+          textContentType="password"
+          secureTextEntry
+          onChangeText={(password) => setPassword(password)}
+          placeholder="Password"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
-        <Text style={styles.textInputHelper}>Last Name</Text>
-        <TextInput
-          onChangeText={(lastName) => setLastName(lastName)}
-          placeholder="Last Name"
-          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
-        />
+        {activeOptionIndex !== 3 ? (
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 1, marginRight: 15 }}>
+              <Text style={styles.textInputHelper}>First Name</Text>
+              <TextInput
+                onChangeText={(firstName) => setFirstName(firstName)}
+                placeholder="First Name"
+                style={[
+                  styles.signinTextInput,
+                  { backgroundColor: Colors.grey80 },
+                ]}
+              />
+            </View>
+            <View style={{ flex: 1, marginRight: 15 }}>
+              <Text style={styles.textInputHelper}>Last Name</Text>
+              <TextInput
+                onChangeText={(lastName) => setLastName(lastName)}
+                placeholder="Last Name"
+                style={[
+                  styles.signinTextInput,
+                  { backgroundColor: Colors.grey80 },
+                ]}
+              />
+            </View>
+          </View>
+        ) : null}
+        {activeOptionIndex === 2 ? renderProfessionalOptions() : null}
+        {activeOptionIndex === 3 ? renderShelterOptions() : null}
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: 1, marginRight: 15 }}>
             <Text style={styles.textInputHelper}>City</Text>
@@ -235,6 +285,17 @@ const SignupScreen = () => {
             />
           </View>
         </View>
+        <Text style={styles.textInputHelper}>Tell Us About You</Text>
+        <TextInput
+          multiline
+          autoCapitalize="none"
+          onChangeText={(bio) => setBio(bio)}
+          placeholder="Let us know something interesting..."
+          style={[
+            styles.signinTextInput,
+            { backgroundColor: Colors.grey80, height: 125 },
+          ]}
+        />
         <Text
           primaryColor
           style={[styles.accountSignupOptionSubText, { marginTop: 25 }]}
@@ -300,6 +361,50 @@ const SignupScreen = () => {
     );
   };
 
+  const renderProfessionalOptions = () => {
+    return (
+      <>
+        <Text style={styles.textInputHelper}>Organization</Text>
+        <TextInput
+          onChangeText={(organization) => setOrganization(organization)}
+          placeholder="Your shelter name..."
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+        <Text style={styles.textInputHelper}>Specialty</Text>
+        <TextInput
+          onChangeText={(specialty) => setSpecialty(specialty)}
+          placeholder="General, specialized?"
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+      </>
+    );
+  };
+
+  const renderShelterOptions = () => {
+    return (
+      <>
+        <Text style={styles.textInputHelper}>Shelter Name</Text>
+        <TextInput
+          onChangeText={(shelterName) => setShelterName(shelterName)}
+          placeholder="Where you work..."
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+        <Text style={styles.textInputHelper}>Your Title</Text>
+        <TextInput
+          onChangeText={(primaryFocus) => setShelterTitle(primaryFocus)}
+          placeholder="Coordinator, owner?"
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+        <Text style={styles.textInputHelper}>Primary Focus</Text>
+        <TextInput
+          onChangeText={(primaryFocus) => setPrimaryFocus(primaryFocus)}
+          placeholder="Cats, dogs, exotics?"
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+      </>
+    );
+  };
+
   if (loading) {
     return <LoadingCat title="Creating your account..." />;
   }
@@ -318,14 +423,6 @@ const SignupScreen = () => {
           <Ionicons name="chevron-back" size={32} color="#FFF" />
         </TouchableOpacity>
         <View style={{ paddingTop: 50 }}>{renderOptions()}</View>
-        {/* <TextInput
-        placeholder="Username"
-        style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
-      />
-      <TextInput
-        placeholder="Password"
-        style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
-      /> */}
         {renderNextButton()}
       </View>
     </ScrollView>
@@ -343,7 +440,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -50,
     left: 0,
-    height: Dimensions.get("window").height * 1.2,
+    height: Dimensions.get("window").height * 1.5,
     width: Dimensions.get("window").width,
     zIndex: -1,
   },

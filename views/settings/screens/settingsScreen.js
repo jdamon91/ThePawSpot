@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Text, Colors } from "react-native-ui-lib";
+import { Text, Colors, Switch } from "react-native-ui-lib";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { auth, db } from "../../../firebase";
@@ -8,6 +8,7 @@ import { auth, db } from "../../../firebase";
 const SettingsScreen = () => {
   const navigation = useNavigation();
   const [authenticated, setAuthenticated] = useState(false);
+  const [notifications, setNotifications] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -29,10 +30,26 @@ const SettingsScreen = () => {
       icon: "person-outline",
       action: () => navigation.navigate("MyProfile"),
     },
-    { title: "Notifications", icon: "notifications-outline" },
-    { title: "Privacy & Security", icon: "lock-closed-outline" },
     {
-      title: "Help and Support",
+      title: "Notifications",
+      icon: "notifications-outline",
+      component: (
+        <Switch
+          value={notifications}
+          onValueChange={() => setNotifications(!notifications)}
+          offColor={Colors.primaryColor}
+          onColor={Colors.primaryColor}
+          thumbColor="#fff"
+        />
+      ),
+    },
+    {
+      title: "Privacy & Security",
+      icon: "lock-closed-outline",
+      action: () => navigation.navigate("Privacy"),
+    },
+    {
+      title: "Help & Support",
       icon: "headset-outline",
       action: () => navigation.navigate("Support"),
     },
@@ -69,7 +86,11 @@ const SettingsScreen = () => {
               <Text style={styles.optionText}>{option.title}</Text>
             </View>
             <View>
-              <Ionicons name="chevron-forward" size={20} color="grey" />
+              {option?.component ? (
+                option.component
+              ) : (
+                <Ionicons name="chevron-forward" size={20} color="grey" />
+              )}
             </View>
           </TouchableOpacity>
         );

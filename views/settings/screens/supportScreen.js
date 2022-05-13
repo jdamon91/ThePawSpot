@@ -66,7 +66,7 @@ const SupportScreen = () => {
       </Text>
       {supportQuestions.map((question, index) => {
         return (
-          <View>
+          <View key={index}>
             <TouchableOpacity
               onPress={() => setActiveIndex(index)}
               style={styles.questionContainer}
