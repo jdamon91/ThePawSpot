@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { Text, Colors } from "react-native-ui-lib";
 import { Ionicons } from "@expo/vector-icons";
 import LostMap from "../components/lostMap";
 import LostMapHeaderOptions from "../components/lostMapHeaderOptions";
-import LostMapFooterOptions from "../components/lostMapFooterOptions";
 import LostMapMenuOptions from "../components/lostMapMenuOptions";
+import LostMapModal from "../components/lostMapModal";
 
 const LostMapScreen = () => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <View style={styles.rootContainer}>
+      <LostMapModal
+        visible={showModal}
+        closeModal={() => setShowModal(false)}
+      />
       <LostMapHeaderOptions />
       <LostMap />
-      <LostMapMenuOptions />
+      <LostMapMenuOptions showModal={() => setShowModal(!showModal)} />
     </View>
   );
 };

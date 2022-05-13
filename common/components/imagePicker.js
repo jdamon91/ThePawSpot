@@ -140,6 +140,7 @@ export default class App extends React.Component {
                 width: 2,
                 height: 1,
               },
+              zIndex: 99999,
             }}
           >
             <MenuOption

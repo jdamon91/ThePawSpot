@@ -78,15 +78,12 @@ const actions = [
   },
 ];
 
-const LostMapMenuOptions = () => {
-  // hooks
+const LostMapMenuOptions = (props) => {
   const sheetRef = useRef();
   const menuRef = useRef();
 
-  // variables
   const snapPoints = useMemo(() => ["25%"], []);
 
-  // callbacks
   const handleSheetChange = useCallback((index) => {
     console.log("handleSheetChange", index);
   }, []);
@@ -97,33 +94,13 @@ const LostMapMenuOptions = () => {
     sheetRef.current?.close();
   }, []);
 
-  // render
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity
-        onPress={() => handleSnapPress(0)}
-        style={[styles.mainButton, { backgroundColor: Colors.primaryColor }]}
-      >
-        <Ionicons name="add" size={46} color="#FFF" style={{ left: 2 }} />
-      </TouchableOpacity>
-      <BottomSheet
-        ref={sheetRef}
-        snapPoints={snapPoints}
-        onChange={handleSheetChange}
-        index={-1}
-        enablePanDownToClose={true}
-        backgroundStyle={styles.contentContainer}
-        style={styles.innerContentContainer}
-      >
-        <BottomSheetView>
-          <Text>Awesome 🔥</Text>
-        </BottomSheetView>
-      </BottomSheet> */}
       <FloatingAction
         ref={menuRef}
         actions={actions}
-        onPressItem={(name) => {
-          console.log(`selected button: ${name}`);
+        onPressItem={() => {
+          props.showModal();
         }}
         color={Colors.primaryColor}
         distanceToEdge={{ vertical: 30, horizontal: 15 }}
@@ -134,8 +111,11 @@ const LostMapMenuOptions = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 200,
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    zIndex: 9999,
+    backgroundColor: "red",
   },
   mainButton: {
     borderRadius: 50,

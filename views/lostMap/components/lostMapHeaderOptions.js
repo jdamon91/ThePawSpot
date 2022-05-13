@@ -17,7 +17,10 @@ const LostMapHeaderOptions = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => console.log("menu")}
-        style={[styles.backButton, { backgroundColor: Colors.primaryColor }]}
+        style={[
+          styles.backButton,
+          { backgroundColor: Colors.primaryColor, height: 45, width: 45 },
+        ]}
       >
         <Ionicons name="ios-options" size={32} color="#FFF" />
       </TouchableOpacity>
@@ -31,7 +34,7 @@ const styles = StyleSheet.create({
     top: Dimensions.get("window").height * 0.06,
     paddingHorizontal: 10,
     width: Dimensions.get("window").width,
-    zIndex: 9,
+    zIndex: 9999,
     flexDirection: "row",
     justifyContent: "space-between",
   },

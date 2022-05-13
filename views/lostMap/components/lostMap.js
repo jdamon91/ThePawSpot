@@ -52,6 +52,7 @@ const LostMap = () => {
   const mapRef = useRef(null);
 
   const [activeIndex, setActiveIndex] = useState("");
+  const [showCards, setShowCards] = useState("flex");
 
   const renderAnimalPin = (animal, index) => {
     return (
@@ -62,8 +63,27 @@ const LostMap = () => {
     );
   };
 
+  const pinPressHandler = (animal, index) => {
+    setShowCards("none");
+    setActiveIndex(index);
+    // setActiveCard(animale.username);
+    mapRef.current.animateToRegion(
+      {
+        latitude: animal.location?.latitude - 0.01,
+        longitude: animal.location?.longitude,
+        latitudeDelta: 0.075,
+        longitudeDelta: 0.075,
+      },
+      750
+    );
+    // setTimeout(() => {
+    //   setShowCards("flex");
+    //   listRef.current.scrollToItem({ item: contractor, animated: false });
+    // }, 500);
+  };
+
   return (
-    <View style={styles.rootContainer}>
+    <>
       <MapView
         clusterColor={Colors.primaryColor}
         maxZoom={10}
@@ -87,6 +107,7 @@ const LostMap = () => {
         minZoomLevel={8} // default => 0
         maxZoomLevel={18}
         cacheEnabled={Platform.OS === "android" ? true : false}
+        onPress={() => console.log("pressed")}
       >
         {animalData.map((animal, index) => {
           return (
@@ -101,7 +122,7 @@ const LostMap = () => {
           );
         })}
       </MapView>
-    </View>
+    </>
   );
 };
 
@@ -118,6 +139,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     top: 0,
+    zIndex: 999,
   },
 });
 
