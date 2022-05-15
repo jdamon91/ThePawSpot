@@ -8,6 +8,7 @@ import * as Location from "expo-location";
 
 const LostMapScreen = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const [userLocation, setUserLocation] = useState({});
 
   useEffect(() => {
@@ -44,8 +45,15 @@ const LostMapScreen = () => {
         closeModal={() => setShowModal(false)}
       />
       <LostMapHeaderOptions />
-      <LostMap />
-      <LostMapMenuOptions showModal={() => setShowModal(!showModal)} />
+      <LostMap
+        hideMenu={() => setShowMenu(false)}
+        showMenuButton={() => setShowMenu(!showMenu)}
+        showModal={() => setShowModal(true)}
+        showMenu={showMenu}
+      />
+      {showMenu ? (
+        <LostMapMenuOptions showModal={() => setShowModal(!showModal)} />
+      ) : null}
     </View>
   );
 };

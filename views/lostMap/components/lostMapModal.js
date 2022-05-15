@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    zIndex: 9999,
+    zIndex: 999999,
   },
   modalView: {
     margin: 20,
