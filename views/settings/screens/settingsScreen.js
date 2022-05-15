@@ -22,8 +22,6 @@ const SettingsScreen = () => {
     }, [auth.currentUser])
   );
 
-  console.log(auth.currentUser, authenticated);
-
   const settingsOptions = [
     {
       title: "Account",

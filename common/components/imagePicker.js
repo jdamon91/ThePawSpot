@@ -268,7 +268,6 @@ export default class App extends React.Component {
         this.setState({ loading: true });
         const uploadUrl = await uploadImageAsync(pickerResult.uri);
         this.setState({ image: uploadUrl, loading: false });
-        console.log(uploadUrl);
         this.props.storeImage(uploadUrl);
       }
     } catch (e) {

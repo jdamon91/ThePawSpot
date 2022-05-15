@@ -5,9 +5,11 @@ import { Colors } from "react-native-ui-lib";
 import ImagePicker from "../../../common/components/imagePicker";
 import { FontAwesome } from "@expo/vector-icons";
 import LoadingCatPost from "../../../common/components/loadingCatPost";
-import { db } from "../../../firebase";
+import { db, auth } from "../../../firebase";
+import uuid from "react-uuid";
 
 const LostMapModal = (props) => {
+  console.log("Test again", props.user);
   const [modalVisible, setModalVisible] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -16,13 +18,16 @@ const LostMapModal = (props) => {
   const [additionalInfo, setAdditionalInfo] = useState("");
 
   const createNewLostAnimal = () => {
+    const uid = uuid();
     try {
       setLoading(true);
-      db.collection("lostAnimals").add({
+      db.collection("lostAnimals").doc(uid).set({
+        uid,
         animalType,
         photoUrl,
         additionalInfo,
         location: props.userLocation,
+        currentUser: props.user,
       });
       setTimeout(() => {
         setLoading(false);
@@ -175,6 +180,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 5,
     right: 12,
+    zIndex: 99999,
   },
 });
 

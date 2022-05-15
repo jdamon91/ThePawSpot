@@ -6,11 +6,11 @@ import LostMapMenuOptions from "../components/lostMapMenuOptions";
 import LostMapModal from "../components/lostMapModal";
 import * as Location from "expo-location";
 
-const LostMapScreen = () => {
+const LostMapScreen = (props) => {
+  console.log("test", props.user);
   const [showModal, setShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [userLocation, setUserLocation] = useState({});
-
   useEffect(() => {
     getLocationHandler();
   }, [getLocationHandler]);
@@ -43,12 +43,14 @@ const LostMapScreen = () => {
         visible={showModal}
         userLocation={userLocation}
         closeModal={() => setShowModal(false)}
+        user={props?.user}
       />
       <LostMapHeaderOptions />
       <LostMap
         hideMenu={() => setShowMenu(false)}
         showMenuButton={() => setShowMenu(!showMenu)}
         showModal={() => setShowModal(true)}
+        modal={showModal}
         showMenu={showMenu}
       />
       {showMenu ? (

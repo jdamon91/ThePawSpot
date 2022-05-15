@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavBar from "./bottomTabNavigator";
 import { TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Colors } from "react-native-ui-lib";
+import { auth, db } from "../../firebase";
 
 // Screens
 import WelcomeScreen from "../../views/welcome/screens/welcomeScreen";
@@ -12,6 +13,7 @@ import LostMapScreen from "../../views/lostMap/screens/lostMapScreen";
 import SigninScreen from "../../views/signin/screens/signinScreen";
 import SignupScreen from "../../views/signup/screens/signupScreen";
 import DonateScreen from "../../views/donate/screens/donateScreen";
+import LostProfileScreen from "../../views/profile/screens/lostProfileScreen";
 import AdoptionProfileScreen from "../../views/profile/screens/adoptionProfileScreen";
 import UserProfileScreen from "../../views/profile/screens/userProfileScreen";
 import ShelterProfileScreen from "../../views/profile/screens/shelterProfileScreen";
@@ -22,6 +24,30 @@ import PrivacyScreen from "../../views/settings/screens/privacyScreen";
 const Stack = createNativeStackNavigator();
 
 function MainStack() {
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
+      db.collection("users")
+        .doc(auth?.currentUser?.uid)
+        .get()
+        .then((data) => {
+          console.log(data.data());
+          data.data();
+          setUser(data.data());
+          setLoading(false);
+        });
+    } catch (error) {
+      error;
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -38,7 +64,7 @@ function MainStack() {
           />
           <Stack.Screen
             name="LostMap"
-            component={LostMapScreen}
+            children={() => <LostMapScreen user={user} />}
             options={{ headerShown: false }}
           />
           <Stack.Screen
@@ -114,6 +140,29 @@ function MainStack() {
             name="AdoptionProfile"
             component={AdoptionProfileScreen}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LostProfile"
+            component={LostProfileScreen}
+            options={({ navigation, route }) => ({
+              headerStyle: {
+                backgroundColor: Colors.secondaryColor,
+                shadowColor: "transparent",
+                elevation: 0, // remove shadow on Android
+                shadowOpacity: 0, // remove shadow on iOS
+              },
+              title: "",
+              headerShadowVisible: false,
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <FontAwesome
+                    name="arrow-left"
+                    size={28}
+                    color={Colors.primaryColor}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
           />
           <Stack.Screen
             name="UserProfile"

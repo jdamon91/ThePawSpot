@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -8,23 +8,44 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Text, Colors } from "react-native-ui-lib";
-import ProfileScreenHeader from "../components/profileScreenHeader";
 import ContactInfoBox from "../components/contactInfoBox";
 import { Ionicons } from "@expo/vector-icons";
 import InfoBox from "../components/infoBox";
 import { useRoute } from "@react-navigation/native";
+import { db } from "../../../firebase";
 
-const ShelterProfileScreen = () => {
+const LostProfileScreen = () => {
   const route = useRoute();
-  const { name, photoUrl } = route.params;
+  const { animalId } = route.params;
+  const [loading, setLoading] = useState(false);
+  const [animalData, setAnimalData] = useState({});
+
+  const fetchLostAnimal = async () => {
+    try {
+      setLoading(true);
+      db.collection("lostAnimals")
+        .doc(animalId)
+        .get()
+        .then((data) => {
+          setAnimalData(data.data());
+          setLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLostAnimal();
+  }, [fetchLostAnimal]);
+
   return (
     <View style={styles.rootContainer}>
-      <ProfileScreenHeader />
       <View style={styles.photoContainer}>
         <Image
           resizeMode="cover"
           style={styles.profileImage}
-          source={{ uri: photoUrl }}
+          source={{ uri: animalData?.photoUrl }}
         />
       </View>
       <ScrollView
@@ -33,7 +54,7 @@ const ShelterProfileScreen = () => {
       >
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <View style={styles.column}>
-            <Text style={styles.infoTitle}>{name}</Text>
+            <Text style={styles.infoTitle}>{animalData?.animalType}</Text>
             <View style={[styles.row, { marginTop: 5 }]}>
               <Ionicons name="location" size={16} color="#ababad" />
               <Text style={styles.infoLocationText}>Raleigh, NC (5 miles)</Text>
@@ -54,13 +75,13 @@ const ShelterProfileScreen = () => {
           <InfoBox title={"9kg"} subTitle={"Weight"} color={"#ffefce"} />
         </View>
         <View style={styles.contactInfoContainer}>
-          <ContactInfoBox title={"Heather"} subTitle={"Adoption Coordinator"} />
+          <ContactInfoBox title={"Christin"} subTitle={"Fiona's Owner"} />
         </View>
         <View style={styles.infoDescriptionContainer}>
-          <Text style={styles.infoDescriptionText} numberOfLines={4}>
-            Furever Animal Shelter has made it their mission to love and support
-            a wide variety of animals in need of a place to call home. Come and
-            visit our furry friends today and find your next furever friend!
+          <Text style={styles.infoDescriptionText} numberOfLines={2}>
+            This amazing sweet girl was found on the side of the road and
+            rescued. She is incredibly sweet and can't wait for her furever
+            home.
           </Text>
         </View>
         <TouchableOpacity
@@ -69,7 +90,7 @@ const ShelterProfileScreen = () => {
             { backgroundColor: Colors.primaryColor },
           ]}
         >
-          <Text style={styles.infoSectionActionButtonText}>GET DIRECTIONS</Text>
+          <Text style={styles.infoSectionActionButtonText}>ADOPT ME</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -153,4 +174,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShelterProfileScreen;
+export default LostProfileScreen;

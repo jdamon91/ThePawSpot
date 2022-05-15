@@ -151,7 +151,7 @@ const LostMap = (props) => {
           );
         })}
       </MapView>
-      {!props.showMenu || showCards !== "none" ? (
+      {!props.modal ? (
         <FlatList
           ref={listRef}
           horizontal
@@ -182,7 +182,7 @@ const LostMap = (props) => {
           }}
         />
       ) : null}
-      {!props.showMenu ? (
+      {!props.modal ? (
         <TouchableOpacity
           onPress={() => props.showModal()}
           style={[

@@ -46,11 +46,9 @@ const SignupScreen = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(userCredential.user.uid);
           db.collection("users").doc(user.uid).set({
             photoUrl,
             username,
-            password,
             email,
             firstName,
             lastName,

@@ -12,8 +12,8 @@ const MapCard = ({ animal }) => {
       <TouchableOpacity
         style={styles.cardContainer}
         onPress={() =>
-          navigation.navigate("AdoptionProfile", {
-            animalId: animal?.photoUrl,
+          navigation.navigate("LostProfile", {
+            animalId: animal?.uid,
           })
         }
       >
