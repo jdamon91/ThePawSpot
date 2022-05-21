@@ -1,16 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text, Image, Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "react-native-ui-lib";
 import { useNavigation } from "@react-navigation/native";
 
-const MapCard = ({ animal }) => {
+const MapCard = ({ animal, lastItem }) => {
   const navigation = useNavigation();
+  const [likedPost, setLikedPost] = useState(false);
+
+  const renderLikedIcon = () => {
+    if (likedPost) {
+      return (
+        <Ionicons
+          style={[styles.cardLikeButton, { marginRight: lastItem ? 25 : 0 }]}
+          name="heart"
+          size={46}
+          color="red"
+          onPress={() => setLikedPost(!likedPost)}
+        />
+      );
+    }
+    return (
+      <Ionicons
+        style={[styles.cardLikeButton, { marginRight: lastItem ? 25 : 0 }]}
+        name="heart-outline"
+        size={40}
+        color="#FFF"
+        onPress={() => setLikedPost(true)}
+      />
+    );
+  };
+
   return (
     <View>
+      {renderLikedIcon()}
       <TouchableOpacity
-        style={styles.cardContainer}
+        style={[styles.cardContainer, { marginRight: lastItem ? 25 : 0 }]}
         onPress={() =>
           navigation.navigate("LostProfile", {
             animalId: animal?.uid,
@@ -33,7 +59,7 @@ const MapCard = ({ animal }) => {
               <Text numberOfLines={1} style={styles.cardTextTitle}>
                 {animal.animalType}
               </Text>
-              <Text numberOfLines={3} style={styles.cardText}>
+              <Text numberOfLines={2} style={styles.cardText}>
                 {animal.additionalInfo}
               </Text>
             </View>
@@ -69,19 +95,19 @@ const styles = StyleSheet.create({
   cardContainer: {
     borderRadius: 10,
     width: Dimensions.get("window").width * 0.8,
-    marginRight: Dimensions.get("window").width * 0.05,
+    marginLeft: Dimensions.get("window").width * 0.05,
   },
   cardInfoContainer: {
     flexDirection: "column",
   },
   cardText: {
-    fontFamily: "Poppins_600SemiBold",
-    fontSize: 13,
+    fontFamily: "Poppins_400Regular",
+    fontSize: 12,
     letterSpacing: 0.75,
   },
   cardTextTitle: {
     fontFamily: "Poppins_700Bold",
-    fontSize: 16,
+    fontSize: 15,
     letterSpacing: 0.75,
   },
   cardButtonContainer: {
@@ -108,7 +134,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: "100%",
-    height: 230,
+    height: 200,
     borderRadius: 30,
     marginTop: 10,
   },
@@ -118,10 +144,18 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: Dimensions.get("window").width * 0.8,
-    paddingBottom: 15,
+    paddingBottom: 8,
     paddingHorizontal: 25,
-    paddingTop: 10,
-    opacity: 0.6,
+    paddingTop: 5,
+    opacity: 0.8,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  cardLikeButton: {
+    position: "absolute",
+    top: 15,
+    right: 6,
+    zIndex: 9999,
   },
 });
 

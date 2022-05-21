@@ -182,6 +182,7 @@ const LostMap = (props) => {
                     animal={animal}
                     item={item}
                     centerTargetLocation={centerTargetLocation}
+                    lastItem={item?.index === animalData?.length - 1}
                   />
                 </View>
               );
@@ -238,13 +239,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     flex: 1,
-    height: Dimensions.get("window").height > 700 ? 255 : 205,
+    height: Dimensions.get("window").height > 700 ? 230 : 195,
     width: Dimensions.get("window").width,
     zIndex: 9999,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     overflow: "visible",
-    paddingLeft: 15,
   },
   mapCardButton: {
     position: "absolute",
