@@ -13,13 +13,14 @@ import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { db } from "../../../firebase";
 import MapCard from "./mapCard";
+import { Ionicons } from "@expo/vector-icons";
 
 const LostMap = (props) => {
   const mapRef = useRef(null);
   const listRef = useRef(null);
 
   const [activeIndex, setActiveIndex] = useState("");
-  const [showCards, setShowCards] = useState("flex");
+  const [showCards, setShowCards] = useState("none");
   const [animalData, setAnimalData] = useState([]);
 
   useEffect(() => {
@@ -91,8 +92,8 @@ const LostMap = (props) => {
       },
       750
     );
+    setShowCards("flex");
     setTimeout(() => {
-      setShowCards("flex");
       listRef.current.scrollToIndex({ index: index, animated: false });
     }, 1000);
   };
@@ -114,6 +115,9 @@ const LostMap = (props) => {
   return (
     <>
       <MapView
+        onLongPress={() => {
+          setShowCards(!showCards), props.showMenuButton();
+        }}
         clusterColor={Colors.primaryColor}
         maxZoom={10}
         provider={PROVIDER_GOOGLE}
@@ -151,13 +155,8 @@ const LostMap = (props) => {
           );
         })}
       </MapView>
-      {!props.modal ? (
-        <FlatList
-          ref={listRef}
-          horizontal
-          onViewableItemsChanged={onViewRef.current}
-          viewabilityConfig={{ waitForInteraction: true }}
-          showsHorizontalScrollIndicator={false}
+      {!props.modal && !props.showMenu ? (
+        <View
           style={[
             styles.scrollView,
             {
@@ -165,24 +164,32 @@ const LostMap = (props) => {
               backgroundColor: Colors.secondaryColor,
             },
           ]}
-          data={animalData}
-          viewabilityConfig={viewConfigRef.current}
-          keyExtractor={(animal) => animal.photoUrl}
-          renderItem={(item) => {
-            const animal = item.item;
-            return (
-              <View key={animal.photoUrl}>
-                <MapCard
-                  animal={animal}
-                  item={item}
-                  centerTargetLocation={centerTargetLocation}
-                />
-              </View>
-            );
-          }}
-        />
+        >
+          <FlatList
+            ref={listRef}
+            horizontal
+            onViewableItemsChanged={onViewRef.current}
+            viewabilityConfig={{ waitForInteraction: true }}
+            showsHorizontalScrollIndicator={false}
+            data={animalData}
+            viewabilityConfig={viewConfigRef.current}
+            keyExtractor={(animal) => animal.photoUrl}
+            renderItem={(item) => {
+              const animal = item.item;
+              return (
+                <View key={animal.photoUrl}>
+                  <MapCard
+                    animal={animal}
+                    item={item}
+                    centerTargetLocation={centerTargetLocation}
+                  />
+                </View>
+              );
+            }}
+          />
+        </View>
       ) : null}
-      {!props.modal ? (
+      {/* {!props.modal ? (
         <TouchableOpacity
           onPress={() => props.showModal()}
           style={[
@@ -192,7 +199,7 @@ const LostMap = (props) => {
         >
           <Text style={styles.createPostButtonText}>CREATE A POST</Text>
         </TouchableOpacity>
-      ) : null}
+      ) : null} */}
     </>
   );
 };
@@ -231,15 +238,18 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     flex: 1,
-    padding: 10,
-    height: Dimensions.get("window").height > 700 ? 250 : 200,
+    height: Dimensions.get("window").height > 700 ? 255 : 205,
     width: Dimensions.get("window").width,
     zIndex: 9999,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingTop: 5,
-    paddingLeft: 27,
     overflow: "visible",
+    paddingLeft: 15,
+  },
+  mapCardButton: {
+    position: "absolute",
+    top: 70,
+    zIndex: 99999,
   },
 });
 

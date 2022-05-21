@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 const MapCard = ({ animal }) => {
   const navigation = useNavigation();
   return (
-    <View style={{ marginRight: 20 }}>
+    <View>
       <TouchableOpacity
         style={styles.cardContainer}
         onPress={() =>
@@ -19,24 +19,23 @@ const MapCard = ({ animal }) => {
       >
         <View style={styles.card} key={animal?.photoUrl}>
           <View style={styles.cardInfoContainer}>
-            <View style={styles.row}>
-              <Image
-                source={{ uri: animal?.photoUrl }}
-                style={[styles.avatar, { borderColor: Colors.primaryColor }]}
-              />
-              <View
-                style={[
-                  styles.cardInfoTextContainer,
-                  { borderColor: Colors.primaryColor },
-                ]}
-              >
-                <Text numberOfLines={1} style={styles.cardTextTitle}>
-                  {animal.animalType}
-                </Text>
-                <Text numberOfLines={3} style={styles.cardText}>
-                  {animal.additionalInfo}
-                </Text>
-              </View>
+            <Image
+              resizeMode="cover"
+              source={{ uri: animal?.photoUrl }}
+              style={[styles.avatar, { borderColor: Colors.primaryColor }]}
+            />
+            <View
+              style={[
+                styles.cardInfoTextContainer,
+                { borderColor: Colors.primaryColor },
+              ]}
+            >
+              <Text numberOfLines={1} style={styles.cardTextTitle}>
+                {animal.animalType}
+              </Text>
+              <Text numberOfLines={3} style={styles.cardText}>
+                {animal.additionalInfo}
+              </Text>
             </View>
           </View>
         </View>
@@ -68,24 +67,15 @@ const styles = StyleSheet.create({
     color: "grey",
   },
   cardContainer: {
-    paddingBottom: 0,
-    paddingTop: 10,
-    paddingRight: 5,
-    paddingBottom: 15,
     borderRadius: 10,
-    width: Dimensions.get("window").width * 0.85,
-  },
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    overflow: "visible",
+    width: Dimensions.get("window").width * 0.8,
+    marginRight: Dimensions.get("window").width * 0.05,
   },
   cardInfoContainer: {
     flexDirection: "column",
-    overflow: "visible",
   },
   cardText: {
-    fontFamily: "Poppins_400Regular",
+    fontFamily: "Poppins_600SemiBold",
     fontSize: 13,
     letterSpacing: 0.75,
   },
@@ -117,32 +107,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   avatar: {
-    width: 125,
-    height: 125,
-    borderRadius: 100,
-    marginRight: 19,
-    borderWidth: 2,
-    shadowColor: "grey",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 2,
+    width: "100%",
+    height: 230,
+    borderRadius: 30,
+    marginTop: 10,
   },
   cardInfoTextContainer: {
     backgroundColor: "#FFF",
-    width: Dimensions.get("window").width * 0.625,
-    left: -60,
-    zIndex: -1,
-    paddingLeft: 55,
-    marginVertical: 8,
-    borderTopRightRadius: 15,
-    borderBottomRightRadius: 15,
-    paddingVertical: 10,
-    borderWidth: 2,
-    shadowColor: "grey",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 2,
-    paddingRight: 20,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    width: Dimensions.get("window").width * 0.8,
+    paddingBottom: 15,
+    paddingHorizontal: 25,
+    paddingTop: 10,
+    opacity: 0.6,
   },
 });
 
