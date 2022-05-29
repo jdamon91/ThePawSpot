@@ -70,18 +70,23 @@ const LostProfileScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.infoBoxContainer}>
-          <InfoBox title={"Female"} subTitle={"Sex"} color={"#ffefce"} />
-          <InfoBox title={"1 Year"} subTitle={"Age"} color={"#f7f7f7"} />
-          <InfoBox title={"9kg"} subTitle={"Weight"} color={"#ffefce"} />
+          <InfoBox
+            title={animalData?.animalType}
+            subTitle={"Type"}
+            color={"#ffefce"}
+          />
+          <InfoBox title={"Raleigh"} subTitle={"City"} color={"#f7f7f7"} />
+          <InfoBox title={"Show Map"} subTitle={"Map"} color={"#ffefce"} />
         </View>
         <View style={styles.contactInfoContainer}>
-          <ContactInfoBox title={"Christin"} subTitle={"Fiona's Owner"} />
+          <ContactInfoBox
+            title={animalData?.currentUser?.username}
+            subTitle={"Contact"}
+          />
         </View>
         <View style={styles.infoDescriptionContainer}>
           <Text style={styles.infoDescriptionText} numberOfLines={2}>
-            This amazing sweet girl was found on the side of the road and
-            rescued. She is incredibly sweet and can't wait for her furever
-            home.
+            {animalData?.additionalInfo}
           </Text>
         </View>
         <TouchableOpacity
@@ -90,7 +95,7 @@ const LostProfileScreen = () => {
             { backgroundColor: Colors.primaryColor },
           ]}
         >
-          <Text style={styles.infoSectionActionButtonText}>ADOPT ME</Text>
+          <Text style={styles.infoSectionActionButtonText}>Contact Me</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

@@ -12,11 +12,26 @@ import {
   donateData,
   adoptData,
 } from "../extra/data";
+import { db } from "../../../firebase";
 
 const ResultsList = (props) => {
   const navigation = useNavigation();
   const [resultsData, setResultsData] = useState([]);
   const [fadeAnim] = useState(new Animated.Value(0));
+
+  const fetchLostPets = async () => {
+    try {
+      await db.collection("lostAnimals").onSnapshot((snapshot) => {
+        const animals = [];
+        snapshot.docs.forEach((animal) => {
+          animals.push(animal.data());
+        });
+        setResultsData(animals);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   useEffect(() => {
     animateResults();
@@ -30,7 +45,7 @@ const ResultsList = (props) => {
       }, 100);
     } else if (props?.activeCategory === "Lost Pets") {
       setTimeout(() => {
-        setResultsData(lostPetData);
+        fetchLostPets();
       }, 100);
     } else if (props?.activeCategory === "Donate") {
       setTimeout(() => {
@@ -76,15 +91,11 @@ const ResultsList = (props) => {
   };
 
   const renderLostPetCardOption = (item) => {
-    if (!item.time) {
-      return null;
-    }
     return (
-      <View style={styles.resultsListItemBodyOptionContainer}>
-        <Text
-          style={[styles.resultsListItemBodyOptionDistance, { marginLeft: 3 }]}
-        >
-          {item?.time} Missing
+      <View style={styles.lostPetItemWrapper}>
+        <Text style={styles.lostPetItemTitle}>{item?.animalType}</Text>
+        <Text style={styles.lostPetItemText} numberOfLines={2}>
+          {item?.additionalInfo}
         </Text>
       </View>
     );
@@ -140,9 +151,8 @@ const ResultsList = (props) => {
       });
     }
     if (props?.activeCategory === "Lost Pets") {
-      navigation.navigate("LostMap", {
-        photoUrl: item.photoUrl,
-        name: item.name,
+      navigation.navigate("LostProfile", {
+        animalId: item?.uid,
       });
     }
     if (props?.activeCategory === "Adopt") {
@@ -310,6 +320,17 @@ const styles = StyleSheet.create({
   resultsListAllButtonText: {
     fontFamily: "Poppins_600SemiBold",
     marginRight: 3,
+  },
+  lostPetItemWrapper: {
+    top: -25,
+    marginRight: 10,
+  },
+  lostPetItemTitle: {
+    fontFamily: "Poppins_600SemiBold",
+  },
+  lostPetItemText: {
+    fontFamily: "Poppins_400Regular",
+    fontSize: 13,
   },
 });
 
