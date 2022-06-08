@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -8,10 +9,8 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { Text, Colors, LoaderScreen } from "react-native-ui-lib";
+import { Text, Colors } from "react-native-ui-lib";
 import ProfileScreenHeader from "../components/profileScreenHeader";
-import { Ionicons } from "@expo/vector-icons";
-import InfoBox from "../components/infoBox";
 import { db, auth } from "../../../firebase";
 import LoadingCat from "../../../common/components/loadingCat";
 
@@ -19,23 +18,35 @@ const AccountProfileScreen = () => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
 
-  console.log(user);
+  const fetchUser = () => {
+    db.collection("users")
+      .doc(auth?.currentUser?.uid)
+      .get()
+      .then((data) => {
+        setUser(data.data());
+        setLoading(false);
+      });
+  };
 
-  useEffect(() => {
-    try {
-      setLoading(true);
-      db.collection("users")
-        .doc(auth?.currentUser?.uid)
-        .get()
-        .then((data) => {
-          setUser(data.data());
+  const updateUser = () => {
+    db.collection("users").doc(auth?.currentUser?.uid).update(user);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        try {
+          setLoading(true);
+          fetchUser();
+        } catch (error) {
+          console.log(error);
           setLoading(false);
-        });
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  }, []);
+        }
+      });
+
+      return () => unsubscribe();
+    }, [])
+  );
 
   if (loading) {
     return <LoadingCat title="Loading..." />;
@@ -62,7 +73,7 @@ const AccountProfileScreen = () => {
         <TextInput
           autoCapitalize="none"
           value={user?.username}
-          onChangeText={(username) => setUsername(username)}
+          onChangeText={(username) => setUser({ ...user, username })}
           placeholder="Username"
           style={[styles.textInput, { backgroundColor: Colors.grey80 }]}
         />
@@ -71,21 +82,21 @@ const AccountProfileScreen = () => {
           autoCapitalize="none"
           value={user?.email}
           textContentType="emailAddress"
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={(email) => setUser({ ...user, email })}
           placeholder="Email"
           style={[styles.textInput, { backgroundColor: Colors.grey80 }]}
         />
         <Text style={styles.textInputHelper}>First Name</Text>
         <TextInput
           value={user?.firstName}
-          onChangeText={(firstName) => setFirstName(firstName)}
+          onChangeText={(firstName) => setUser({ ...user, firstName })}
           placeholder="First Name"
           style={[styles.textInput, { backgroundColor: Colors.grey80 }]}
         />
         <Text style={styles.textInputHelper}>Last Name</Text>
         <TextInput
           value={user?.lastName}
-          onChangeText={(lastName) => setLastName(lastName)}
+          onChangeText={(lastName) => setUser({ ...user, lastName })}
           placeholder="Last Name"
           style={[styles.textInput, { backgroundColor: Colors.grey80 }]}
         />
@@ -94,7 +105,7 @@ const AccountProfileScreen = () => {
             <Text style={styles.textInputHelper}>City</Text>
             <TextInput
               value={user?.city}
-              onChangeText={(city) => setCity(city)}
+              onChangeText={(city) => setUser({ ...user, city })}
               placeholder="Your City"
               style={[styles.textInput, { backgroundColor: Colors.grey80 }]}
             />
@@ -103,13 +114,14 @@ const AccountProfileScreen = () => {
             <Text style={styles.textInputHelper}>State</Text>
             <TextInput
               value={user?.state}
-              onChangeText={(state) => setState(state)}
+              onChangeText={(state) => setUser({ ...user, state })}
               placeholder="Your State"
               style={[styles.textInput, { backgroundColor: Colors.grey80 }]}
             />
           </View>
         </View>
         <TouchableOpacity
+          onPress={updateUser}
           style={[
             styles.infoSectionActionButton,
             { backgroundColor: Colors.primaryColor },
