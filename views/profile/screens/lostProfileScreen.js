@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   View,
   StyleSheet,
@@ -13,12 +19,25 @@ import { Ionicons } from "@expo/vector-icons";
 import InfoBox from "../components/infoBox";
 import { useRoute } from "@react-navigation/native";
 import { db } from "../../../firebase";
+import BottomSheet from "@gorhom/bottom-sheet";
+import MapLocation from "../../../common/components/mapLocation";
 
 const LostProfileScreen = () => {
   const route = useRoute();
   const { animalId } = route.params;
   const [loading, setLoading] = useState(false);
   const [animalData, setAnimalData] = useState({});
+
+  // ref
+  const bottomSheetRef = useRef();
+
+  // variables
+  const snapPoints = useMemo(() => ["60%", "80%"], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
 
   const fetchLostAnimal = async () => {
     try {
@@ -48,56 +67,74 @@ const LostProfileScreen = () => {
           source={{ uri: animalData?.photoUrl }}
         />
       </View>
-      <ScrollView
-        style={styles.infoContainer}
-        showsVerticalScrollIndicator={false}
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        handleIndicatorStyle={{
+          backgroundColor: Colors.primaryColor,
+          height: 7,
+          width: 50,
+          marginBottom: 15,
+        }}
       >
-        <View style={[styles.row, { justifyContent: "space-between" }]}>
-          <View style={styles.column}>
-            <Text style={styles.infoTitle}>{animalData?.animalType}</Text>
-            <View style={[styles.row, { marginTop: 5 }]}>
-              <Ionicons name="location" size={16} color="#ababad" />
-              <Text style={styles.infoLocationText}>Raleigh, NC (5 miles)</Text>
+        <ScrollView
+          style={styles.infoContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={[styles.row, { justifyContent: "space-between" }]}>
+            <View style={styles.column}>
+              <Text style={styles.infoTitle}>{animalData?.animalType}</Text>
+              <View style={[styles.row, { marginTop: 5 }]}>
+                <Ionicons name="location" size={16} color="#ababad" />
+                <Text style={styles.infoLocationText}>
+                  Raleigh, NC (5 miles)
+                </Text>
+              </View>
             </View>
+            <TouchableOpacity
+              style={[
+                styles.likeButton,
+                { backgroundColor: Colors.primaryColor },
+              ]}
+            >
+              <Ionicons name="heart" size={26} color="#FFF" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.infoBoxContainer}>
+            <InfoBox
+              title={animalData?.animalType}
+              subTitle={"Type"}
+              color={"#ffefce"}
+            />
+            <InfoBox title={"Raleigh"} subTitle={"City"} color={"#f7f7f7"} />
+            <InfoBox title={"Show Map"} subTitle={"Map"} color={"#ffefce"} />
+          </View>
+          <View style={styles.contactInfoContainer}>
+            <ContactInfoBox
+              title={animalData?.currentUser?.username}
+              subTitle={"Contact"}
+            />
+          </View>
+          <View style={styles.infoDescriptionContainer}>
+            <Text style={styles.infoDescriptionText} numberOfLines={2}>
+              {animalData?.additionalInfo}
+            </Text>
           </View>
           <TouchableOpacity
             style={[
-              styles.likeButton,
+              styles.infoSectionActionButton,
               { backgroundColor: Colors.primaryColor },
             ]}
           >
-            <Ionicons name="heart" size={26} color="#FFF" />
+            <Text style={styles.infoSectionActionButtonText}>Contact Me</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.infoBoxContainer}>
-          <InfoBox
-            title={animalData?.animalType}
-            subTitle={"Type"}
-            color={"#ffefce"}
-          />
-          <InfoBox title={"Raleigh"} subTitle={"City"} color={"#f7f7f7"} />
-          <InfoBox title={"Show Map"} subTitle={"Map"} color={"#ffefce"} />
-        </View>
-        <View style={styles.contactInfoContainer}>
-          <ContactInfoBox
-            title={animalData?.currentUser?.username}
-            subTitle={"Contact"}
-          />
-        </View>
-        <View style={styles.infoDescriptionContainer}>
-          <Text style={styles.infoDescriptionText} numberOfLines={2}>
-            {animalData?.additionalInfo}
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={[
-            styles.infoSectionActionButton,
-            { backgroundColor: Colors.primaryColor },
-          ]}
-        >
-          <Text style={styles.infoSectionActionButtonText}>Contact Me</Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <View style={{ marginBottom: 150 }}>
+            <MapLocation photoUrl={animalData?.photoUrl} />
+          </View>
+        </ScrollView>
+      </BottomSheet>
     </View>
   );
 };
@@ -163,7 +200,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     alignItems: "center",
     marginTop: 25,
-    marginBottom: 100,
+    marginBottom: 30,
     shadowColor: "grey",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,

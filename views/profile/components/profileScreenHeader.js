@@ -4,16 +4,20 @@ import { Colors } from "react-native-ui-lib";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const ProfileScreenHeader = () => {
+const ProfileScreenHeader = (props) => {
   const navigation = useNavigation();
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={[styles.backButton, { backgroundColor: Colors.primaryColor }]}
-      >
-        <Ionicons name="chevron-back" size={24} color="#FFF" />
-      </TouchableOpacity>
+      {!props.hideBackButton ? (
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={[styles.backButton, { backgroundColor: Colors.primaryColor }]}
+        >
+          <Ionicons name="chevron-back" size={24} color="#FFF" />
+        </TouchableOpacity>
+      ) : (
+        <View />
+      )}
       <TouchableOpacity
         style={[styles.cameraButton, { backgroundColor: Colors.primaryColor }]}
       >

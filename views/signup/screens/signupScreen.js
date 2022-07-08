@@ -36,11 +36,13 @@ const SignupScreen = () => {
   const [primaryFocus, setPrimaryFocus] = useState("");
   const [shelterName, setShelterName] = useState("");
   const [shelterTitle, setShelterTitle] = useState("");
+  const [shelterPhoneNumber, setShelterPhoneNumber] = useState("");
+  const [shelterWebsite, setShelterWebsite] = useState("");
+  const [description, setDescription] = useState("");
 
   const createNewUser = () => {
     try {
       setLoading(true);
-      console.log(username, password, email, firstName, lastName, city, state);
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
@@ -59,6 +61,8 @@ const SignupScreen = () => {
             specialty,
             shelterName,
             shelterTitle,
+            shelterPhoneNumber,
+            shelterWebsite,
             primaryFocus,
           });
           setTimeout(() => {
@@ -177,28 +181,6 @@ const SignupScreen = () => {
     );
   };
 
-  const professionalInputs = () => {
-    return (
-      <>
-        <Text style={styles.textInputHelper}>Specialty</Text>
-        <TextInput
-          autoCapitalize="none"
-          onChangeText={(specialty) => setSpecialty(specialty)}
-          placeholder="General, specialized?"
-          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
-        />
-        <Text style={styles.textInputHelper}>Or</Text>
-        <TextInput
-          textContentType="password"
-          secureTextEntry
-          onChangeText={(password) => setPassword(password)}
-          placeholder="Password"
-          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
-        />
-      </>
-    );
-  };
-
   const renderGeneralInputs = () => {
     return (
       <View>
@@ -209,6 +191,9 @@ const SignupScreen = () => {
             creating={true}
           />
         </View>
+        <Text primaryColor style={styles.categoryTitle}>
+          General Information
+        </Text>
         <Text style={styles.textInputHelper}>Username</Text>
         <TextInput
           autoCapitalize="none"
@@ -258,6 +243,21 @@ const SignupScreen = () => {
             </View>
           </View>
         ) : null}
+        {activeOptionIndex === 1 ? (
+          <>
+            <Text style={styles.textInputHelper}>Bio</Text>
+            <TextInput
+              onChangeText={(text) => setDescription(text)}
+              placeholder="Tell us more about you..."
+              style={[
+                styles.signinTextInput,
+                { backgroundColor: Colors.grey80, paddingTop: 10 },
+              ]}
+              multiline
+              textAlignVertical="center"
+            />
+          </>
+        ) : null}
         {activeOptionIndex === 2 ? renderProfessionalOptions() : null}
         {activeOptionIndex === 3 ? renderShelterOptions() : null}
         <View style={{ flexDirection: "row" }}>
@@ -284,17 +284,6 @@ const SignupScreen = () => {
             />
           </View>
         </View>
-        <Text style={styles.textInputHelper}>Tell Us About You</Text>
-        <TextInput
-          multiline
-          autoCapitalize="none"
-          onChangeText={(bio) => setBio(bio)}
-          placeholder="Let us know something interesting..."
-          style={[
-            styles.signinTextInput,
-            { backgroundColor: Colors.grey80, height: 125 },
-          ]}
-        />
         <Text
           primaryColor
           style={[styles.accountSignupOptionSubText, { marginTop: 25 }]}
@@ -317,6 +306,8 @@ const SignupScreen = () => {
   const stepBackHandler = () => {
     if (currentStep !== 1) {
       setCurrentStep(currentStep - 1);
+    } else {
+      navigation.goBack();
     }
   };
 
@@ -332,19 +323,6 @@ const SignupScreen = () => {
         return renderInitialOptions();
         break;
     }
-  };
-
-  const renderBackButton = () => {
-    return (
-      <TouchableOpacity
-        style={[styles.signinButton, { backgroundColor: Colors.primaryColor }]}
-        onPress={stepBackHandler}
-      >
-        <Text white style={styles.signinButtonText}>
-          BACK
-        </Text>
-      </TouchableOpacity>
-    );
   };
 
   const renderNextButton = () => {
@@ -375,6 +353,17 @@ const SignupScreen = () => {
           placeholder="General, specialized?"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
+        <Text style={styles.textInputHelper}>Bio</Text>
+        <TextInput
+          onChangeText={(text) => setDescription(text)}
+          placeholder="Tell us more about you..."
+          style={[
+            styles.signinTextInput,
+            { backgroundColor: Colors.grey80, paddingTop: 10 },
+          ]}
+          multiline
+          textAlignVertical="center"
+        />
       </>
     );
   };
@@ -382,11 +371,31 @@ const SignupScreen = () => {
   const renderShelterOptions = () => {
     return (
       <>
+        <Text primaryColor style={styles.categoryTitle}>
+          Shelter Information
+        </Text>
         <Text style={styles.textInputHelper}>Shelter Name</Text>
         <TextInput
           onChangeText={(shelterName) => setShelterName(shelterName)}
           placeholder="Where you work..."
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+        <Text style={styles.textInputHelper}>Shelter Animal Type</Text>
+        <TextInput
+          onChangeText={(primaryFocus) => setPrimaryFocus(primaryFocus)}
+          placeholder="Cats, dogs, exotics?"
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+        <Text style={styles.textInputHelper}>Shelter Description</Text>
+        <TextInput
+          onChangeText={(text) => setDescription(text)}
+          placeholder="Tell us more about your shelter..."
+          style={[
+            styles.signinTextInput,
+            { backgroundColor: Colors.grey80, paddingTop: 10 },
+          ]}
+          multiline
+          textAlignVertical="center"
         />
         <Text style={styles.textInputHelper}>Your Title</Text>
         <TextInput
@@ -394,10 +403,16 @@ const SignupScreen = () => {
           placeholder="Coordinator, owner?"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
-        <Text style={styles.textInputHelper}>Primary Focus</Text>
+        <Text style={styles.textInputHelper}>Shelter Phone Number</Text>
         <TextInput
-          onChangeText={(primaryFocus) => setPrimaryFocus(primaryFocus)}
-          placeholder="Cats, dogs, exotics?"
+          onChangeText={(value) => setShelterPhoneNumber(value)}
+          placeholder="How to contact your shelter..."
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+        <Text style={styles.textInputHelper}>Shelter Website</Text>
+        <TextInput
+          onChangeText={(value) => setShelterWebsite(value)}
+          placeholder="Your shelter's website..."
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
       </>
@@ -416,7 +431,7 @@ const SignupScreen = () => {
           style={styles.backgroundImage}
         />
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={stepBackHandler}
           style={[styles.backButton, { backgroundColor: Colors.primaryColor }]}
         >
           <Ionicons name="chevron-back" size={32} color="#FFF" />
@@ -582,6 +597,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 10,
     paddingTop: 5,
+  },
+  categoryTitle: {
+    fontFamily: "Poppins_700Bold",
+    fontSize: 18,
+    letterSpacing: 0.5,
+    textAlign: "center",
+    marginVertical: 5,
   },
 });
 

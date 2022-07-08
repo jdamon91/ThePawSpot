@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -13,10 +13,23 @@ import ContactInfoBox from "../components/contactInfoBox";
 import { Ionicons } from "@expo/vector-icons";
 import InfoBox from "../components/infoBox";
 import { useRoute } from "@react-navigation/native";
+import BottomSheet from "@gorhom/bottom-sheet";
+import MapLocation from "../../../common/components/mapLocation";
 
 const AdoptionProfileScreen = () => {
   const route = useRoute();
   const { name, photoUrl } = route.params;
+
+  // ref
+  const bottomSheetRef = useRef();
+
+  // variables
+  const snapPoints = useMemo(() => ["60%", "80%"], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
 
   return (
     <View style={styles.rootContainer}>
@@ -28,51 +41,69 @@ const AdoptionProfileScreen = () => {
           source={{ uri: photoUrl }}
         />
       </View>
-      <ScrollView
-        style={styles.infoContainer}
-        showsVerticalScrollIndicator={false}
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        handleIndicatorStyle={{
+          backgroundColor: Colors.primaryColor,
+          height: 7,
+          width: 50,
+          marginBottom: 15,
+        }}
       >
-        <View style={[styles.row, { justifyContent: "space-between" }]}>
-          <View style={styles.column}>
-            <Text style={styles.infoTitle}>{name}</Text>
-            <View style={[styles.row, { marginTop: 5 }]}>
-              <Ionicons name="location" size={16} color="#ababad" />
-              <Text style={styles.infoLocationText}>Raleigh, NC (5 miles)</Text>
+        <ScrollView
+          style={styles.infoContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={[styles.row, { justifyContent: "space-between" }]}>
+            <View style={styles.column}>
+              <Text style={styles.infoTitle}>{name}</Text>
+              <View style={[styles.row, { marginTop: 5 }]}>
+                <Ionicons name="location" size={16} color="#ababad" />
+                <Text style={styles.infoLocationText}>
+                  Raleigh, NC (5 miles)
+                </Text>
+              </View>
             </View>
+            <TouchableOpacity
+              style={[
+                styles.likeButton,
+                { backgroundColor: Colors.primaryColor },
+              ]}
+            >
+              <Ionicons name="heart" size={26} color="#FFF" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.infoBoxContainer}>
+            <InfoBox title={"Female"} subTitle={"Sex"} color={"#ffefce"} />
+            <InfoBox title={"1 Year"} subTitle={"Age"} color={"#f7f7f7"} />
+            <InfoBox title={"9kg"} subTitle={"Weight"} color={"#ffefce"} />
+          </View>
+          <View style={styles.contactInfoContainer}>
+            <ContactInfoBox title={"Christin"} subTitle={"Fiona's Owner"} />
+          </View>
+          <View style={styles.infoDescriptionContainer}>
+            <Text style={styles.infoDescriptionText} numberOfLines={2}>
+              This amazing sweet girl was found on the side of the road and
+              rescued. She is incredibly sweet and can't wait for her furever
+              home.
+            </Text>
           </View>
           <TouchableOpacity
             style={[
-              styles.likeButton,
+              styles.infoSectionActionButton,
               { backgroundColor: Colors.primaryColor },
             ]}
           >
-            <Ionicons name="heart" size={26} color="#FFF" />
+            <Text style={styles.infoSectionActionButtonText}>ADOPT ME</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.infoBoxContainer}>
-          <InfoBox title={"Female"} subTitle={"Sex"} color={"#ffefce"} />
-          <InfoBox title={"1 Year"} subTitle={"Age"} color={"#f7f7f7"} />
-          <InfoBox title={"9kg"} subTitle={"Weight"} color={"#ffefce"} />
-        </View>
-        <View style={styles.contactInfoContainer}>
-          <ContactInfoBox title={"Christin"} subTitle={"Fiona's Owner"} />
-        </View>
-        <View style={styles.infoDescriptionContainer}>
-          <Text style={styles.infoDescriptionText} numberOfLines={2}>
-            This amazing sweet girl was found on the side of the road and
-            rescued. She is incredibly sweet and can't wait for her furever
-            home.
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={[
-            styles.infoSectionActionButton,
-            { backgroundColor: Colors.primaryColor },
-          ]}
-        >
-          <Text style={styles.infoSectionActionButtonText}>ADOPT ME</Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <View style={{ marginBottom: 150 }}>
+            <MapLocation photoUrl={photoUrl} />
+          </View>
+        </ScrollView>
+      </BottomSheet>
     </View>
   );
 };
@@ -138,7 +169,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     alignItems: "center",
     marginTop: 25,
-    marginBottom: 100,
+    marginBottom: 30,
     shadowColor: "grey",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,

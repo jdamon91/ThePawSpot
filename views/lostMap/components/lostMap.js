@@ -169,7 +169,6 @@ const LostMap = (props) => {
             ref={listRef}
             horizontal
             onViewableItemsChanged={onViewRef.current}
-            viewabilityConfig={{ waitForInteraction: true }}
             showsHorizontalScrollIndicator={false}
             data={animalData}
             viewabilityConfig={viewConfigRef.current}

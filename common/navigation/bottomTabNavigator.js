@@ -9,6 +9,8 @@ import MessagesScreen from "../../views/messages/screens/messagesScreen";
 
 // Icons
 import { FontAwesome } from "@expo/vector-icons";
+import { auth } from "../../firebase";
+import SignInScreen from "../../views/signin/screens/signinScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -46,7 +48,9 @@ const BottomTabNavBar = () => {
       />
       <Tab.Screen
         name="Messages"
-        component={MessagesScreen}
+        children={() =>
+          auth.currentUser ? <MessagesScreen /> : <SignInScreen />
+        }
         options={{
           tabBarIcon: ({ color }) => (
             <FontAwesome
@@ -60,7 +64,9 @@ const BottomTabNavBar = () => {
       />
       <Tab.Screen
         name="MyProfile"
-        component={AccountProfileScreen}
+        children={() =>
+          auth.currentUser ? <AccountProfileScreen /> : <SignInScreen />
+        }
         options={{
           tabBarIcon: ({ color }) => (
             <FontAwesome
