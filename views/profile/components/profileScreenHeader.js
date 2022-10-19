@@ -18,11 +18,16 @@ const ProfileScreenHeader = (props) => {
       ) : (
         <View />
       )}
-      <TouchableOpacity
-        style={[styles.cameraButton, { backgroundColor: Colors.primaryColor }]}
-      >
-        <Ionicons name="camera" size={26} color="#FFF" />
-      </TouchableOpacity>
+      {props.showCameraButton ? (
+        <TouchableOpacity
+          style={[
+            styles.cameraButton,
+            { backgroundColor: Colors.primaryColor },
+          ]}
+        >
+          <Ionicons name="camera" size={26} color="#FFF" />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };

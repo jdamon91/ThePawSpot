@@ -14,10 +14,9 @@ const ImageCarousel = () => {
       width={width}
       height={245}
       data={data}
-      renderItem={({ item }) => {
-        console.log(item);
-        return <Image source={item.image} style={styles.homeCarouselImage} />;
-      }}
+      renderItem={({ item }) => (
+        <Image source={item.image} style={styles.homeCarouselImage} />
+      )}
       autoPlay={false}
       autoPlayInterval={6000}
     />

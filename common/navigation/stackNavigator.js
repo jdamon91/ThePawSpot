@@ -34,7 +34,6 @@ function MainStack() {
         .doc(auth?.currentUser?.uid)
         .get()
         .then((data) => {
-          console.log(data.data());
           data.data();
           setUser(data.data());
           setLoading(false);
@@ -139,7 +138,25 @@ function MainStack() {
           <Stack.Screen
             name="AdoptionProfile"
             component={AdoptionProfileScreen}
-            options={{ headerShown: false }}
+            options={({ navigation, route }) => ({
+              headerStyle: {
+                backgroundColor: Colors.secondaryColor,
+                shadowColor: "transparent",
+                elevation: 0, // remove shadow on Android
+                shadowOpacity: 0, // remove shadow on iOS
+              },
+              title: "",
+              headerShadowVisible: false,
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <FontAwesome
+                    name="arrow-left"
+                    size={28}
+                    color={Colors.primaryColor}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
           />
           <Stack.Screen
             name="LostProfile"
@@ -167,12 +184,48 @@ function MainStack() {
           <Stack.Screen
             name="UserProfile"
             component={UserProfileScreen}
-            options={{ headerShown: false }}
+            options={({ navigation, route }) => ({
+              headerStyle: {
+                backgroundColor: Colors.secondaryColor,
+                shadowColor: "transparent",
+                elevation: 0, // remove shadow on Android
+                shadowOpacity: 0, // remove shadow on iOS
+              },
+              title: "",
+              headerShadowVisible: false,
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <FontAwesome
+                    name="arrow-left"
+                    size={28}
+                    color={Colors.primaryColor}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
           />
           <Stack.Screen
             name="ShelterProfile"
             component={ShelterProfileScreen}
-            options={{ headerShown: false }}
+            options={({ navigation, route }) => ({
+              headerStyle: {
+                backgroundColor: Colors.secondaryColor,
+                shadowColor: "transparent",
+                elevation: 0, // remove shadow on Android
+                shadowOpacity: 0, // remove shadow on iOS
+              },
+              title: "",
+              headerShadowVisible: false,
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <FontAwesome
+                    name="arrow-left"
+                    size={28}
+                    color={Colors.primaryColor}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
           />
           <Stack.Screen
             name="Signin"

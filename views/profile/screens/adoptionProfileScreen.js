@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useCallback } from "react";
+import React, { useRef, useMemo, useCallback, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -24,16 +24,10 @@ const AdoptionProfileScreen = () => {
   const bottomSheetRef = useRef();
 
   // variables
-  const snapPoints = useMemo(() => ["60%", "80%"], []);
-
-  // callbacks
-  const handleSheetChanges = useCallback((index) => {
-    console.log("handleSheetChanges", index);
-  }, []);
+  const snapPoints = useMemo(() => ["57%", "90%"], []);
 
   return (
     <View style={styles.rootContainer}>
-      <ProfileScreenHeader />
       <View style={styles.photoContainer}>
         <Image
           resizeMode="cover"
@@ -43,9 +37,8 @@ const AdoptionProfileScreen = () => {
       </View>
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
         handleIndicatorStyle={{
           backgroundColor: Colors.primaryColor,
           height: 7,

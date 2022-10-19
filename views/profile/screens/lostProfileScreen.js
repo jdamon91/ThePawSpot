@@ -32,12 +32,7 @@ const LostProfileScreen = () => {
   const bottomSheetRef = useRef();
 
   // variables
-  const snapPoints = useMemo(() => ["60%", "80%"], []);
-
-  // callbacks
-  const handleSheetChanges = useCallback((index) => {
-    console.log("handleSheetChanges", index);
-  }, []);
+  const snapPoints = useMemo(() => ["57%", "90%"], []);
 
   const fetchLostAnimal = async () => {
     try {
@@ -69,9 +64,8 @@ const LostProfileScreen = () => {
       </View>
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
         handleIndicatorStyle={{
           backgroundColor: Colors.primaryColor,
           height: 7,

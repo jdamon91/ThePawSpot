@@ -7,7 +7,6 @@ import LostMapModal from "../components/lostMapModal";
 import * as Location from "expo-location";
 
 const LostMapScreen = (props) => {
-  console.log("test", props.user);
   const [showModal, setShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
   const [userLocation, setUserLocation] = useState({});

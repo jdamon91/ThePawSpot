@@ -13,6 +13,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { Text, Colors } from "react-native-ui-lib";
 import ProfileScreenHeader from "../components/profileScreenHeader";
@@ -57,16 +58,11 @@ const AccountProfileScreen = () => {
   const bottomSheetRef = useRef();
 
   // variables
-  const snapPoints = useMemo(() => ["60%", "80%"], []);
-
-  // callbacks
-  const handleSheetChanges = useCallback((index) => {
-    console.log("handleSheetChanges", index);
-  }, []);
+  const snapPoints = useMemo(() => ["57%", "80%"], []);
 
   return (
     <View style={styles.rootContainer}>
-      <ProfileScreenHeader hideBackButton />
+      <ProfileScreenHeader hideBackButton showCameraButton />
       <View style={styles.photoContainer}>
         <Image
           resizeMode="cover"
@@ -76,9 +72,8 @@ const AccountProfileScreen = () => {
       </View>
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
         handleIndicatorStyle={{
           backgroundColor: Colors.primaryColor,
           height: 7,
@@ -86,7 +81,7 @@ const AccountProfileScreen = () => {
           marginBottom: 15,
         }}
       >
-        <View style={styles.infoContainer}>
+        <ScrollView style={styles.infoContainer}>
           <Text primaryColor style={styles.textTitle}>
             Account Information
           </Text>
@@ -150,7 +145,7 @@ const AccountProfileScreen = () => {
           >
             <Text style={styles.infoSectionActionButtonText}>SAVE</Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </BottomSheet>
     </View>
   );

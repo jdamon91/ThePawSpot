@@ -9,7 +9,6 @@ import { db, auth } from "../../../firebase";
 import uuid from "react-uuid";
 
 const LostMapModal = (props) => {
-  console.log("Test again", props.user);
   const [modalVisible, setModalVisible] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [loading, setLoading] = useState(false);

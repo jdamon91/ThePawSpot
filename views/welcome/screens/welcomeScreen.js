@@ -8,33 +8,15 @@ const WelcomeScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.rootContainer}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Main")}
+      style={[styles.rootContainer, { backgroundColor: Colors.primaryColor }]}
+    >
       <Image
         style={styles.backgroundImage}
-        source={require("../../../assets/splash-bg.png")}
+        source={require("../../../assets/main.png")}
       />
-      <Image
-        source={require("../../../assets/home-bg.png")}
-        style={styles.mainImage}
-      />
-      <Text style={styles.title}>A Community That Is All About Pets</Text>
-      <Text style={styles.subTitle}>
-        Bringing together humans and pets is what we are all about
-      </Text>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Main")}
-        style={[styles.button, { backgroundColor: Colors.primaryColor }]}
-      >
-        <View style={styles.buttonIconContainer}>
-          <Ionicons
-            name="chevron-forward"
-            size={34}
-            color={Colors.primaryColor}
-          />
-        </View>
-        <Text style={styles.buttonText}>Get Started</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -43,16 +25,15 @@ const styles = StyleSheet.create({
     paddingTop: Dimensions.get("window").height * 0.1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    backgroundColor: "#FFF",
     alignItems: "center",
     paddingHorizontal: 25,
   },
   backgroundImage: {
     position: "absolute",
     left: 0,
-    top: 0,
+    top: 110,
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height * 0.9,
+    height: Dimensions.get("window").height * 0.925,
   },
   title: {
     fontSize: 28,
@@ -72,7 +53,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 50,
     paddingLeft: 5,
-    paddingRight: 40,
+    paddingRight: 80,
     marginTop: 25,
     flexDirection: "row",
     alignItems: "center",
@@ -94,6 +75,14 @@ const styles = StyleSheet.create({
   mainImage: {
     width: "100%",
     height: Dimensions.get("window").height < 700 ? 300 : 350,
+  },
+  textContainer: {
+    position: "absolute",
+    bottom: Dimensions.get("window").height * 0.2,
+    left: 0,
+    alignSelf: "center",
+    width: Dimensions.get("window").width,
+    paddingHorizontal: 40,
   },
 });
 

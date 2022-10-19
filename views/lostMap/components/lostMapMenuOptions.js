@@ -84,9 +84,6 @@ const LostMapMenuOptions = (props) => {
 
   const snapPoints = useMemo(() => ["25%"], []);
 
-  const handleSheetChange = useCallback((index) => {
-    console.log("handleSheetChange", index);
-  }, []);
   const handleSnapPress = useCallback((index) => {
     sheetRef.current?.snapToIndex(index);
   }, []);

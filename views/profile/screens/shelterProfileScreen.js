@@ -19,7 +19,6 @@ const ShelterProfileScreen = () => {
   const { name, photoUrl } = route.params;
   return (
     <View style={styles.rootContainer}>
-      <ProfileScreenHeader />
       <View style={styles.photoContainer}>
         <Image
           resizeMode="cover"

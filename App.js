@@ -6,6 +6,7 @@ import {
 } from "@expo-google-fonts/poppins";
 import MainStack from "./common/navigation/stackNavigator";
 import { MenuProvider } from "react-native-popup-menu";
+import FlashMessage from "react-native-flash-message";
 
 // Style Setup
 import "./common/styles/mainStyleConfig";
@@ -26,6 +27,7 @@ export default function App() {
 
   return (
     <MenuProvider>
+      <FlashMessage position="top" />
       <MainStack />
     </MenuProvider>
   );

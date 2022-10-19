@@ -16,7 +16,6 @@ const LostMapHeaderOptions = () => {
         <Ionicons name="chevron-back" size={32} color="#FFF" />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => console.log("menu")}
         style={[
           styles.backButton,
           { backgroundColor: Colors.primaryColor, height: 45, width: 45 },

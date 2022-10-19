@@ -78,7 +78,6 @@ const LostMap = (props) => {
   };
 
   const pinPressHandler = (animal, index) => {
-    console.log(animal);
     props.hideMenu();
     setShowCards("none");
     setActiveIndex(index);

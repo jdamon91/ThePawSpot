@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -23,17 +23,11 @@ const UserProfileScreen = () => {
   const bottomSheetRef = useRef();
 
   // variables
-  const snapPoints = useMemo(() => ["60%", "80%"], []);
+  const snapPoints = useMemo(() => ["57%", "90%"], []);
 
-  // callbacks
-  const handleSheetChanges = useCallback((index) => {
-    console.log("handleSheetChanges", index);
-  }, []);
   const { photoUrl, name } = route.params;
-  console.log(photoUrl);
   return (
     <View style={styles.rootContainer}>
-      <ProfileScreenHeader />
       <View style={styles.photoContainer}>
         <Image
           resizeMode="cover"
@@ -43,7 +37,7 @@ const UserProfileScreen = () => {
       </View>
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         handleIndicatorStyle={{
@@ -105,7 +99,7 @@ const UserProfileScreen = () => {
           >
             <Text style={styles.infoSectionActionButtonText}>CHAT NOW</Text>
           </TouchableOpacity>
-          <View style={{ marginBottom: 150 }}>
+          <View style={{ marginBottom: 30 }}>
             <MapLocation photoUrl={photoUrl} />
           </View>
         </ScrollView>

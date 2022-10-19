@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { db, auth } from "../../../firebase";
 import ImagePicker from "../../../common/components/imagePicker";
 import LoadingCat from "../../../common/components/loadingCat";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 const SignupScreen = () => {
   const navigation = useNavigation();
@@ -33,12 +34,27 @@ const SignupScreen = () => {
   const [bio, setBio] = useState("");
   const [organization, setOrganization] = useState("");
   const [specialty, setSpecialty] = useState("");
+  const [experience, setExperience] = useState("");
   const [primaryFocus, setPrimaryFocus] = useState("");
   const [shelterName, setShelterName] = useState("");
   const [shelterTitle, setShelterTitle] = useState("");
   const [shelterPhoneNumber, setShelterPhoneNumber] = useState("");
   const [shelterWebsite, setShelterWebsite] = useState("");
   const [description, setDescription] = useState("");
+
+  const formValidationHandler = () => {
+    if (!username || !password || !email || !firstName || !lastName || !bio) {
+      showMessage({
+        message: "Please fill out all required fields",
+        type: "warning",
+        icon: "warning",
+        duration: 3000,
+        titleStyle: { fontFamily: "Poppins_400Regular", fontSize: 15 },
+      });
+      return false;
+    }
+    createNewUser();
+  };
 
   const createNewUser = () => {
     try {
@@ -48,23 +64,29 @@ const SignupScreen = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          db.collection("users").doc(user.uid).set({
-            photoUrl,
-            username,
-            email,
-            firstName,
-            lastName,
-            city,
-            state,
-            bio,
-            organization,
-            specialty,
-            shelterName,
-            shelterTitle,
-            shelterPhoneNumber,
-            shelterWebsite,
-            primaryFocus,
-          });
+          db.collection("users")
+            .doc(user.uid)
+            .set({
+              photoUrl:
+                photoUrl ||
+                "https://firebasestorage.googleapis.com/v0/b/likenow-294a5.appspot.com/o/1671814b-8cad-41df-9880-0b2efbbf00af?alt=media&token=ab3db4fc-f10a-4189-8fa1-423c6c349383",
+              username,
+              email,
+              firstName,
+              lastName,
+              city,
+              state,
+              bio,
+              description,
+              organization,
+              specialty,
+              experience,
+              shelterName,
+              shelterTitle,
+              shelterPhoneNumber,
+              shelterWebsite,
+              primaryFocus,
+            });
           setTimeout(() => {
             setLoading(false);
             navigation.navigate("Home");
@@ -194,14 +216,24 @@ const SignupScreen = () => {
         <Text primaryColor style={styles.categoryTitle}>
           General Information
         </Text>
-        <Text style={styles.textInputHelper}>Username</Text>
+        <Text style={styles.textInputHelper}>
+          Username{" "}
+          <Text style={styles.asterik} primaryColor>
+            *
+          </Text>
+        </Text>
         <TextInput
           autoCapitalize="none"
           onChangeText={(username) => setUsername(username)}
           placeholder="Username"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
-        <Text style={styles.textInputHelper}>Email Address</Text>
+        <Text style={styles.textInputHelper}>
+          Email Address{" "}
+          <Text style={styles.asterik} primaryColor>
+            *
+          </Text>
+        </Text>
         <TextInput
           autoCapitalize="none"
           textContentType="emailAddress"
@@ -209,7 +241,12 @@ const SignupScreen = () => {
           placeholder="Email"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
-        <Text style={styles.textInputHelper}>Create Password</Text>
+        <Text style={styles.textInputHelper}>
+          Create Password{" "}
+          <Text style={styles.asterik} primaryColor>
+            *
+          </Text>
+        </Text>
         <TextInput
           textContentType="password"
           secureTextEntry
@@ -220,7 +257,12 @@ const SignupScreen = () => {
         {activeOptionIndex !== 3 ? (
           <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 1, marginRight: 15 }}>
-              <Text style={styles.textInputHelper}>First Name</Text>
+              <Text style={styles.textInputHelper}>
+                First Name{" "}
+                <Text style={styles.asterik} primaryColor>
+                  *
+                </Text>
+              </Text>
               <TextInput
                 onChangeText={(firstName) => setFirstName(firstName)}
                 placeholder="First Name"
@@ -231,7 +273,12 @@ const SignupScreen = () => {
               />
             </View>
             <View style={{ flex: 1, marginRight: 15 }}>
-              <Text style={styles.textInputHelper}>Last Name</Text>
+              <Text style={styles.textInputHelper}>
+                Last Name{" "}
+                <Text style={styles.asterik} primaryColor>
+                  *
+                </Text>
+              </Text>
               <TextInput
                 onChangeText={(lastName) => setLastName(lastName)}
                 placeholder="Last Name"
@@ -245,9 +292,14 @@ const SignupScreen = () => {
         ) : null}
         {activeOptionIndex === 1 ? (
           <>
-            <Text style={styles.textInputHelper}>Bio</Text>
+            <Text style={styles.textInputHelper}>
+              Bio{" "}
+              <Text style={styles.asterik} primaryColor>
+                *
+              </Text>
+            </Text>
             <TextInput
-              onChangeText={(text) => setDescription(text)}
+              onChangeText={(text) => setBio(text)}
               placeholder="Tell us more about you..."
               style={[
                 styles.signinTextInput,
@@ -297,7 +349,7 @@ const SignupScreen = () => {
 
   const stepNextHandler = () => {
     if (currentStep === 2) {
-      createNewUser();
+      formValidationHandler();
     } else {
       setCurrentStep(currentStep + 1);
     }
@@ -353,9 +405,20 @@ const SignupScreen = () => {
           placeholder="General, specialized?"
           style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
         />
-        <Text style={styles.textInputHelper}>Bio</Text>
+        <Text style={styles.textInputHelper}>Years of Experience</Text>
         <TextInput
-          onChangeText={(text) => setDescription(text)}
+          onChangeText={(text) => setExperience(text)}
+          placeholder="# of years you've practiced"
+          style={[styles.signinTextInput, { backgroundColor: Colors.grey80 }]}
+        />
+        <Text style={styles.textInputHelper}>
+          Bio{" "}
+          <Text style={styles.asterik} primaryColor>
+            *
+          </Text>
+        </Text>
+        <TextInput
+          onChangeText={(text) => setBio(text)}
           placeholder="Tell us more about you..."
           style={[
             styles.signinTextInput,
@@ -604,6 +667,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     textAlign: "center",
     marginVertical: 5,
+  },
+  asterik: {
+    fontSize: 14,
   },
 });
 
